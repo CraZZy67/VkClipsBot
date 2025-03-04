@@ -5,13 +5,15 @@ import pickle
 from time import sleep
 
 from src.settings import Settings
-from src.logger import logger
+from src.logger import auth_logger
 
 
 class UserAuthorizer:
     LOGIN_LINK = 'https://login.vk.com/?act=web_token'
     MESSENGER_LINK = 'https://vk.com/im'
+    
     LOCAL_STORAGE_KEY = '6287487:web_token:login:auth'
+    FILE_NAME = 'user_creds'
     
     def __init__(self, headless: bool = True):
         options = ChromeOptions()
@@ -53,14 +55,16 @@ class UserAuthorizer:
     def save_session_creds(self, creds_path: str = Settings.CREDS_PATH):
         creds = self.driver.execute_script(
             f'return JSON.parse(localStorage.getItem("{self.LOCAL_STORAGE_KEY}"));')
-        self.driver.get(self.LOGIN_LINK)
         
+        self.driver.get(self.LOGIN_LINK)
         sleep(2.0)
         
         cookie = self.driver.get_cookies()
         
-        logger.debug(f'Пойманые Cookie: {[x['name'] for x in cookie]}')
-        logger.debug(f'Пойманный токен: {creds}')
+        auth_logger.debug(f'Пойманые Cookie: {[x['name'] for x in cookie]}')
+        auth_logger.debug(f'Пойманный токен: {creds}')
         
-        with open(creds_path + 'user_creds.pkl', 'wb') as file:
+        with open(creds_path + f'{self.FILE_NAME}.pkl', 'wb') as file:
             pickle.dump(dict(cookie=cookie, access_token=creds['access_token']), file)
+        
+        self.driver.quit()
