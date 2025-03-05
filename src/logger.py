@@ -22,3 +22,5 @@ add_hadlers(logger=auth_logger)
 # ---------    
 auth_logger.setLevel(logging.DEBUG)
 # ---------
+
+# logging.disable()
