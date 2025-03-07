@@ -1,9 +1,10 @@
 import dotenv
+from selenium.webdriver import Chrome
 
 import os
 import unittest
 
-from src.objects.authorizers import UserAuthorizer
+from src.objects.authorizer import UserAuthorizer
 
 class TestUserAuthorizer(unittest.TestCase):
     
@@ -20,4 +21,14 @@ class TestUserAuthorizer(unittest.TestCase):
         authorizer.save_session_creds()
         
         self.assertTrue(True)
+    
+    def test_anonym(self):
+        driver = Chrome()
+        driver.get('https://vk.com/icollbelgu')
         
+        authorizer = UserAuthorizer(headless=False)
+        
+        authorizer.driver = driver
+        authorizer.LOCAL_STORAGE_KEY = '6287487:get_anonym_token:login:auth'
+        
+        authorizer.save_session_creds(file_name='anonym_creds', out_session=True)
