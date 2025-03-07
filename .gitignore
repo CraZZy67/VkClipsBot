@@ -304,5 +304,7 @@ pip-selfcheck.json
 logs.log
 creds/user_creds.pkl
 creds/anonym_creds.pkl
+.vscode
+media/*
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,venv,dotenv
