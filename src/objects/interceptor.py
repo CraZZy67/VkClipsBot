@@ -28,7 +28,7 @@ class Interceptor:
     
     def __init__(self, inter_public: str):
         self.inter_public = inter_public
-        self.inted_video = [456241519, 456241518]
+        self.inted_video = list()
 
         self.cycles = int()
         self.video_count: int = self.get_json()['response']['count']

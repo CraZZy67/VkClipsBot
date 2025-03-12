@@ -3,19 +3,12 @@ import requests
 import os
 import pickle
 import json
-from abc import ABC, abstractmethod
 
 from src.settings import Settings
 from src.logger import down_logger
 
 
-class Downloader(ABC):
-    
-    @abstractmethod
-    def download(self, video_id: str, public_id: str) -> str:
-        pass
-
-class VideoDownloader(Downloader):   
+class VideoDownloader:   
     DATA = {
         'act': 'show', 'al': '1',
         'autoplay': '0', 'module': 'public',
