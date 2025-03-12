@@ -14,6 +14,8 @@ class UserAuthorizer:
     
     LOCAL_STORAGE_KEY = '6287487:web_token:login:auth'
     
+    settings = Settings()
+    
     def __init__(self, headless: bool = True):
         options = ChromeOptions()
         

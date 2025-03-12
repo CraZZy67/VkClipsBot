@@ -1,7 +1,8 @@
 from dataclasses import dataclass
+from typing import Any
 
-@dataclass
-class Settings: 
+
+class Settings:
     CREDS_PATH = 'creds/'
     VIDEO_PATH = 'media/'
     
