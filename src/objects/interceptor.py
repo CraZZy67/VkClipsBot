@@ -42,14 +42,15 @@ class Interceptor:
             for i in ids:
                 if not i in self.inted_video:
                     self.DOWNLOADER.download(public_id=self.inter_public, video_id=i)
+                    self.inted_video.append(i)
                     return i
-                
+            
             count += 10
             
             if self.video_count - count < 0:
                 self.cycles += 1
                 self.inted_video = list()
-                count = 10
+                count = 10       
                 
     def get_video_ids(self, count: str) -> list:
         response = self.get_json(count=count)['response']
