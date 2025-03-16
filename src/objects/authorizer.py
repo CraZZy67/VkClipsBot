@@ -9,7 +9,6 @@ from src.logger import auth_logger
 
 
 class UserAuthorizer:
-    LOGIN_LINK = 'https://login.vk.com/?act=web_token'
     MESSENGER_LINK = 'https://vk.com/im'
     
     LOCAL_STORAGE_KEY = '6287487:web_token:login:auth'
@@ -58,7 +57,7 @@ class UserAuthorizer:
             f'return JSON.parse(localStorage.getItem("{self.LOCAL_STORAGE_KEY}"));')
         
         if not out_session:
-            self.driver.get(self.LOGIN_LINK)
+            self.driver.get(self.settings.LOGIN_LINK)
             sleep(2.0)
         
         cookie = self.driver.get_cookies()

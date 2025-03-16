@@ -1,11 +1,16 @@
-from selenium.webdriver import Chrome, ChromeOptions
+from selenium.webdriver import Chrome, ChromeOptions, ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.common.exceptions import StaleElementReferenceException
+
+import dotenv
 
 import pickle
 import time
+import os
 
 from src.settings import Settings
+from src.logger import upload_logger
 
 
 class Uploader: 
@@ -14,27 +19,35 @@ class Uploader:
     DOMAIN = 'https://vk.com/'
     TIMEOUT = 300.0
     
-    def upload(self, public_id: str, video_id: str, headless: bool = True):
+    def upload(self, own_public_id: str, inter_public_id: str, video_id: str, headless: bool = True):
+        dotenv.load_dotenv
+        
         driver = self.get_driver(headless=headless)
-        driver.get(self.DOMAIN + public_id)
+        driver.get(self.DOMAIN + own_public_id)
         
         self.refresh_cookie(driver)
-        driver.refresh()
+        driver.get(self.DOMAIN + own_public_id)
         
-        button = driver.find_element(By.CSS_SELECTOR, '[data_testid="posting_create_clip_button"]')
+        upload_logger.debug(f'Cookie на текущей странице: {[(x['name'], x['domain']) for x in driver.get_cookies()]}')
+        
+        button = driver.find_element(By.CSS_SELECTOR, '[data-testid="posting_create_clip_button"]')
         button.click()
         
-        input = driver.find_element(By.CSS_SELECTOR, '[multiple data-testid="video_upload_select_file"]')
-        input.send_keys(f'{self.settings.VIDEO_PATH}{public_id}/{video_id}.mp4')
+        input = driver.find_element(By.CSS_SELECTOR, '[data-testid="video_upload_select_file"]')
+        file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{inter_public_id}/{video_id}.mp4'
+        input.send_keys(file_path)
         
         button = driver.find_element(By.CSS_SELECTOR, '[data-testid="clips-uploadForm-publish-button"]')
-        
         wait = WebDriverWait(driver, timeout=self.TIMEOUT)
-        wait.until('vkui-focus-visible' in button.get_property('class'))
         
-        button.click()
-        time.sleep(2.0)
-        
+        try:
+            wait.until(lambda _ : button.is_enabled())
+        except StaleElementReferenceException:
+            button = driver.find_element(By.CSS_SELECTOR, '[data-testid="clips-uploadForm-publish-button"]')
+            ActionChains(driver=driver).click(button).perform()
+            
+            time.sleep(1.0)
+            
         driver.quit()
          
     def get_driver(self, headless: bool) -> Chrome:
@@ -45,6 +58,7 @@ class Uploader:
             
         driver = Chrome(options=options)
         driver.implicitly_wait(30.0)
+        driver.set_window_size(1200, 850)
         
         return driver
         
@@ -53,5 +67,14 @@ class Uploader:
         with open(path, 'rb') as file:
             self.creds = pickle.load(file)
         
-        [driver.add_cookie(x['name'], x['value']) for x in self.creds['cookie']]
+        self.add_certain_cookie(excepted_domain='.login.vk.com', driver=driver)
+                
+        driver.get(self.settings.LOGIN_LINK)
+        time.sleep(1.0)
         
+        self.add_certain_cookie(excepted_domain='.vk.com', driver=driver)
+        
+    def add_certain_cookie(self, excepted_domain: str, driver: Chrome):
+        for cookie in self.creds['cookie']:
+            if cookie['domain'] != excepted_domain:
+                driver.add_cookie({'name': cookie['name'], 'value': cookie['value']})

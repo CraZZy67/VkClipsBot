@@ -15,7 +15,7 @@ def add_hadlers(logger: Logger):
 # ---------
 
 # ---------
-auth_logger = logging.getLogger('authorizers')
+auth_logger = logging.getLogger('authorizer')
 add_hadlers(logger=auth_logger)
 
 inter_logger = logging.getLogger('interceptor')
@@ -23,12 +23,16 @@ add_hadlers(logger=inter_logger)
 
 down_logger = logging.getLogger('download')
 add_hadlers(logger=down_logger)
+
+upload_logger = logging.getLogger('upload')
+add_hadlers(logger=upload_logger)
 # ---------
 
 # ---------    
 auth_logger.setLevel(logging.DEBUG)
 inter_logger.setLevel(logging.DEBUG)
 down_logger.setLevel(logging.DEBUG)
+upload_logger.setLevel(logging.DEBUG)
 # ---------
 
 # logging.disable()

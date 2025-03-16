@@ -19,8 +19,6 @@ class TestUserAuthorizer(unittest.TestCase):
         authorizer.enter_verify_code(verify_code=code)
         authorizer.enter_password(password=os.getenv('PASSWORD_FOR_TEST'))
         authorizer.save_session_creds()
-        
-        self.assertTrue(True)
     
     def test_anonym(self):
         driver = Chrome()

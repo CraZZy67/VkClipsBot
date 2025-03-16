@@ -9,6 +9,8 @@ class Settings:
     USERS_FILE_NAME = 'user_creds'
     ANONYM_FILE_NAME = 'anonym_creds'
     
+    LOGIN_LINK = 'https://login.vk.com/?act=web_token'
+    
     HEADERS = {
         'accept': '*/*', 'Accept-Encoding': 'gzip, deflate, br, zstd',
         'accept-language': 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7',
