@@ -19,14 +19,14 @@ class Uploader:
     DOMAIN = 'https://vk.com/'
     TIMEOUT = 300.0
     
-    def upload(self, own_public_id: str, inter_public_id: str, video_id: str, headless: bool = True):
+    def upload(self, own_public: str, inter_public: str, video_id: str, headless: bool = True):
         dotenv.load_dotenv
         
         driver = self.get_driver(headless=headless)
-        driver.get(self.DOMAIN + own_public_id)
+        driver.get(self.DOMAIN + own_public)
         
         self.refresh_cookie(driver)
-        driver.get(self.DOMAIN + own_public_id)
+        driver.get(self.DOMAIN + own_public)
         
         upload_logger.debug(f'Cookie на текущей странице: {[(x['name'], x['domain']) for x in driver.get_cookies()]}')
         
@@ -34,7 +34,7 @@ class Uploader:
         button.click()
         
         input = driver.find_element(By.CSS_SELECTOR, '[data-testid="video_upload_select_file"]')
-        file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{inter_public_id}/{video_id}.mp4'
+        file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{inter_public}/{video_id}.mp4'
         input.send_keys(file_path)
         
         button = driver.find_element(By.CSS_SELECTOR, '[data-testid="clips-uploadForm-publish-button"]')
