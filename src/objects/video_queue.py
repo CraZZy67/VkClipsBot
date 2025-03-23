@@ -2,26 +2,25 @@ from collections import deque
 from asyncio import sleep
 import time
 
-
-from src.objects.uploader import Uploader
+from src.objects.uploader import VideoUploader
 from src.my_exceptions import QueueLenException
+from src.settings import Settings
 
 
-class DebugVideoQueue:
-    UPLOADER = Uploader()
+class VideoQueue:
+    UPLOADER = VideoUploader()
+    settings = Settings()
     
-    def __init__(self, inter_public: str, own_public: str, interval: int):
-        self.inter_public = inter_public
-        self.own_public = own_public
+    def __init__(self, interval: int):
         self.interval = interval
         
-        self.queue = deque(maxlen=5)
+        self.queue = deque(maxlen=self.settings.MAX_LEN_QUEUE)
         self.run = True
     
     def add_video(self, video_id: str):
         self.queue.appendleft(video_id)
     
-    async def run_next_video(self):
+    async def run_next_video(self, inter_public: str, own_public: str) -> str:
         if self.run: 
             if len(self.queue): 
                 await sleep(float(self.interval * 60))
@@ -32,22 +31,23 @@ class DebugVideoQueue:
             if len(self.queue):
                 video_id = self.queue.pop()
                 
-                self.UPLOADER.upload(self.own_public, 
-                                    self.inter_public, video_id=video_id)
+                self.UPLOADER.upload(own_public, inter_public, 
+                                     video_id=video_id)
+                return video_id
             else:
                 raise QueueLenException
         else:
             self.run = True 
     
-    def delete_video(self):
+    def delete_video(self) -> str:
         if len(self.queue):
-            self.queue.pop()
+            return self.queue.pop()
         else:
             raise QueueLenException
 
 
-class DebugVideoQueue(DebugVideoQueue):
-    def run_next_video(self):
+class DebugVideoQueue(VideoQueue):
+    def run_next_video(self, inter_public: str, own_public: str):
         if self.run: 
             if len(self.queue): 
                 time.sleep(float(self.interval * 60))
@@ -58,8 +58,8 @@ class DebugVideoQueue(DebugVideoQueue):
             if len(self.queue):
                 video_id = self.queue.pop()
                 
-                self.UPLOADER.upload(self.own_public, 
-                                    self.inter_public, video_id=video_id)
+                self.UPLOADER.upload(own_public, inter_public, 
+                                     video_id=video_id)
             else:
                 raise QueueLenException
         else:

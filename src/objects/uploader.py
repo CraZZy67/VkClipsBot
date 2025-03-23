@@ -13,7 +13,7 @@ from src.settings import Settings
 from src.logger import upload_logger
 
 
-class Uploader: 
+class VideoUploader: 
     settings = Settings()
     
     DOMAIN = 'https://vk.com/'

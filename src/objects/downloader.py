@@ -6,6 +6,7 @@ import json
 
 from src.settings import Settings
 from src.logger import down_logger
+from src.my_exceptions import AccessDeniedException
 
 
 class VideoDownloader:   
@@ -47,6 +48,9 @@ class VideoDownloader:
         
         response = response.text.replace('<!--', '')
         response = json.loads(response)
+        
+        if 'Ошибка доступа' in response['payload'][1][0]:
+            raise AccessDeniedException
         
         for i in self.KEYS_LIST: response = response[i]
 
