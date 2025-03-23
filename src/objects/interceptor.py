@@ -5,6 +5,7 @@ import pickle
 from src.objects.downloader import VideoDownloader
 from src.settings import Settings
 from src.logger import inter_logger
+from src.my_exceptions import AccessDeniedException
 
 
 class Interceptor:
@@ -31,8 +32,11 @@ class Interceptor:
         self.inted_video = list()
 
         self.cycles = int()
-        self.video_count: int = self.get_json()['response']['count']
-    
+        try:
+            self.video_count: int = self.get_json()['response']['count']
+        except KeyError:
+            raise AccessDeniedException
+            
     def intercept_video(self) -> int:
         count = 10
         

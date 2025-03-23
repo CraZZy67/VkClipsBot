@@ -57,7 +57,12 @@ class Public:
             
             while True:
                 if not self.stop:
-                    self.video_queue.add_video(str(self.interceptor.intercept_video()))
+                    
+                    try:
+                        self.video_queue.add_video(str(self.interceptor.intercept_video()))
+                    except AccessDeniedException:
+                        self.refresh_anonym_token()
+                        self.video_queue.add_video(str(self.interceptor.intercept_video()))
                     
                     video = await self.video_queue.run_next_video(self.inter_public, 
                                                                   self.public_id)
