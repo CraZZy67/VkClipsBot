@@ -20,7 +20,7 @@ class VideoUploader:
     TIMEOUT = 300.0
     
     def upload(self, own_public: str, inter_public: str, video_id: str, headless: bool = True):
-        dotenv.load_dotenv
+        dotenv.load_dotenv()
         
         driver = self.get_driver(headless=headless)
         driver.get(self.DOMAIN + own_public)

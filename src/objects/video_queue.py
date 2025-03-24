@@ -47,7 +47,7 @@ class VideoQueue:
 
 
 class DebugVideoQueue(VideoQueue):
-    def run_next_video(self, inter_public: str, own_public: str):
+    def run_next_video(self, inter_public: str, own_public: str) -> str:
         if self.run: 
             if len(self.queue): 
                 time.sleep(float(self.interval * 60))
@@ -60,6 +60,7 @@ class DebugVideoQueue(VideoQueue):
                 
                 self.UPLOADER.upload(own_public, inter_public, 
                                      video_id=video_id)
+                return video_id
             else:
                 raise QueueLenException
         else:
