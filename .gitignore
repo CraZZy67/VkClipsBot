@@ -306,5 +306,6 @@ creds/user_creds.pkl
 creds/anonym_creds.pkl
 .vscode
 media/*
+states/*
 
 # End of https://www.toptal.com/developers/gitignore/api/python,pycharm,venv,dotenv
