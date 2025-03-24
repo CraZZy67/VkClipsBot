@@ -42,9 +42,12 @@ class Public:
             except AccessDeniedException:
                 self.refresh_anonym_token()
                 self.interceptor.intercept_video()
-                
-        for i in os.listdir(f'./media/{self.inter_public}/'):       
-            self.video_queue.add_video(i.replace('.mp4', ''))         
+        
+        for i in os.listdir(f'./media/{self.inter_public}/'):
+            i = i.replace('.mp4', '')
+            
+            if not i in self.video_queue:       
+                self.video_queue.add_video(i)         
                         
     async def start(self):
         if not self.started:
