@@ -1,11 +1,13 @@
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
 import pickle
 from time import sleep
 
 from src.settings import Settings
 from src.logger import auth_logger
+from src.my_exceptions import NoValidVerifyCodeException
 
 
 class UserAuthorizer:
@@ -22,7 +24,7 @@ class UserAuthorizer:
             options.add_argument('--headless')
             
         self.driver = Chrome(options=options)
-        self.driver.implicitly_wait(30.0)
+        self.driver.implicitly_wait(15.0)
     
     def send_verify_code(self, phone_number: str):
         self.driver.get(self.MESSENGER_LINK)
@@ -42,6 +44,11 @@ class UserAuthorizer:
         
         for number, cell in zip(splited_code, cells_input):
             cell.send_keys(number)
+        
+        try:
+            self.driver.find_element(By.CLASS_NAME, 'vkc__Password__Wrapper')
+        except NoSuchElementException:
+            raise NoValidVerifyCodeException
     
     def enter_password(self, password: str):
         div = self.driver.find_element(By.CLASS_NAME, 'vkc__Password__Wrapper')

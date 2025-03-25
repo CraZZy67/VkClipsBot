@@ -1,7 +1,7 @@
 from selenium.webdriver import Chrome, ChromeOptions, ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.common.exceptions import StaleElementReferenceException
+from selenium.common.exceptions import StaleElementReferenceException, NoSuchElementException, InvalidArgumentException
 
 import dotenv
 
@@ -11,6 +11,7 @@ import os
 
 from src.settings import Settings
 from src.logger import upload_logger
+from src.my_exceptions import NoValidOwnPublicException, NoValidVideoPathException
 
 
 class VideoUploader: 
@@ -30,12 +31,19 @@ class VideoUploader:
         
         upload_logger.debug(f'Cookie на текущей странице: {[(x['name'], x['domain']) for x in driver.get_cookies()]}')
         
-        button = driver.find_element(By.CSS_SELECTOR, '[data-testid="posting_create_clip_button"]')
+        try:
+            button = driver.find_element(By.CSS_SELECTOR, '[data-testid="posting_create_clip_button"]')
+        except NoSuchElementException as ex:
+            raise NoValidOwnPublicException
+            
         button.click()
         
         input = driver.find_element(By.CSS_SELECTOR, '[data-testid="video_upload_select_file"]')
         file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{inter_public}/{video_id}.mp4'
-        input.send_keys(file_path)
+        try:
+            input.send_keys(file_path)
+        except InvalidArgumentException:
+            raise NoValidVideoPathException
         
         button = driver.find_element(By.CSS_SELECTOR, '[data-testid="clips-uploadForm-publish-button"]')
         wait = WebDriverWait(driver, timeout=self.TIMEOUT)
@@ -57,7 +65,7 @@ class VideoUploader:
             options.add_argument('--headless')
             
         driver = Chrome(options=options)
-        driver.implicitly_wait(30.0)
+        driver.implicitly_wait(15.0)
         driver.set_window_size(1200, 850)
         
         return driver

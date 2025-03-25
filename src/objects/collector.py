@@ -1,7 +1,7 @@
 import pickle
 
 from src.objects.public import Public
-from src.my_exceptions import PublicsLenException, NoValidId
+from src.my_exceptions import PublicsLenException, NoValidIdException
 from src.settings import Settings
 
 
@@ -15,7 +15,7 @@ class Collector:
     
     def add_public(self, public: Public, id: str):
         if self.max_publics != len(self.publics):
-            if id in self.publics: raise NoValidId
+            if id in self.publics: raise NoValidIdException
             
             self.publics[id] = public
         else:

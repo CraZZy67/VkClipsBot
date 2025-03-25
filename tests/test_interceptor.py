@@ -4,7 +4,7 @@ import os
 import unittest
 
 from src.objects.interceptor import Interceptor
-
+from src.my_exceptions import NoValidInterPublicException
 
 class TestInterceptor(unittest.TestCase):
     
@@ -13,6 +13,10 @@ class TestInterceptor(unittest.TestCase):
         
         inter = Interceptor(inter_public=os.getenv('PUBLIC_ID_FOR_TEST'))
         inter.intercept_video()
+        
+        inter = Interceptor(inter_public=os.getenv('NO_VALID_PUBLIC_ID_FOR_TEST'))
+        with self.assertRaises(NoValidInterPublicException):
+            inter.intercept_video()
     
     def test_cycles(self):
         dotenv.load_dotenv()

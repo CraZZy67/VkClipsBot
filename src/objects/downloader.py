@@ -6,7 +6,7 @@ import json
 
 from src.settings import Settings
 from src.logger import down_logger
-from src.my_exceptions import AccessDeniedException
+from src.my_exceptions import AccessDeniedException, NoFoundVideoException
 
 
 class VideoDownloader:   
@@ -51,6 +51,9 @@ class VideoDownloader:
         
         if 'Ошибка доступа' in response['payload'][1][0]:
             raise AccessDeniedException
+        
+        if 'Видеозапись недоступна' in response['payload'][1][0]:
+            raise NoFoundVideoException
         
         for i in self.KEYS_LIST: response = response[i]
 

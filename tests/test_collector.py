@@ -7,7 +7,7 @@ from src.objects.public import DebugPublic
 from src.objects.interceptor import Interceptor
 from src.objects.video_queue import DebugVideoQueue
 from src.objects.collector import Collector
-from src.my_exceptions import NoValidId, PublicsLenException
+from src.my_exceptions import NoValidIdException, PublicsLenException
 
 
 class TestCollector(unittest.TestCase): 
@@ -38,7 +38,7 @@ class TestCollector(unittest.TestCase):
         
         collector.delete_public('11')
         
-        with self.assertRaises(NoValidId):
+        with self.assertRaises(NoValidIdException):
             collector.add_public(public=public2, id='13')
         
         collector.delete_public('12')

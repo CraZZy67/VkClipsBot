@@ -1,11 +1,12 @@
 import requests
 
 import pickle
+from time import sleep
 
 from src.objects.downloader import VideoDownloader
 from src.settings import Settings
 from src.logger import inter_logger
-from src.my_exceptions import AccessDeniedException
+from src.my_exceptions import AccessDeniedException, NoValidInterPublicException
 
 
 class Interceptor:
@@ -41,8 +42,11 @@ class Interceptor:
         except KeyError:
             raise AccessDeniedException
         
+        if not video_count: raise NoValidInterPublicException
+        
         while True:
             ids = self.get_video_ids(count=str(count))
+            sleep(1.0)
             
             for i in ids:
                 if not i in self.inted_video:
