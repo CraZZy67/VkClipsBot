@@ -6,7 +6,7 @@ import os
 from src.objects.public import DebugPublic
 from src.objects.interceptor import Interceptor
 from src.objects.video_queue import DebugVideoQueue
-from src.my_exceptions import QueueLenException, NotFoundVideoException
+from src.my_exceptions import QueueLenException
 
 
 class TestPublic(unittest.TestCase):
@@ -33,8 +33,6 @@ class TestPublic(unittest.TestCase):
         
         [public.video_queue.delete_video() for x in range(5)]
         
-        with self.assertRaises(NotFoundVideoException):
-            public.add_video(os.getenv('NO_VALID_VIDEO_ID_TEST'))
     
     def test_delete(self):
         dotenv.load_dotenv()

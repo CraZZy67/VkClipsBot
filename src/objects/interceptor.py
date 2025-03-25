@@ -32,13 +32,14 @@ class Interceptor:
         self.inted_video = list()
 
         self.cycles = int()
-        try:
-            self.video_count: int = self.get_json()['response']['count']
-        except KeyError:
-            raise AccessDeniedException
             
     def intercept_video(self) -> int:
         count = 10
+        
+        try:
+            video_count = self.get_json()['response']['count']
+        except KeyError:
+            raise AccessDeniedException
         
         while True:
             ids = self.get_video_ids(count=str(count))
@@ -51,13 +52,17 @@ class Interceptor:
             
             count += 10
             
-            if self.video_count - count < 0:
+            if video_count - count < 0:
                 self.cycles += 1
                 self.inted_video = list()
                 count = 10       
                 
     def get_video_ids(self, count: str) -> list:
-        response = self.get_json(count=count)['response']
+        try:
+            response = self.get_json(count=count)['response']
+        except KeyError:
+            raise AccessDeniedException
+        
         ids = list()
         
         for i in response['items']:

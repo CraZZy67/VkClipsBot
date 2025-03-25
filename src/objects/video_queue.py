@@ -27,17 +27,17 @@ class VideoQueue:
             else:
                 raise QueueLenException
             
-        if self.run:
-            if len(self.queue):
-                video_id = self.queue.pop()
-                
-                self.UPLOADER.upload(own_public, inter_public, 
-                                     video_id=video_id)
-                return video_id
+            if self.run:
+                if len(self.queue):
+                    video_id = self.queue.pop()
+                    
+                    self.UPLOADER.upload(own_public, inter_public, 
+                                        video_id=video_id)
+                    return video_id
+                else:
+                    raise QueueLenException
             else:
-                raise QueueLenException
-        else:
-            self.run = True 
+                self.run = True 
     
     def delete_video(self) -> str:
         if len(self.queue):
