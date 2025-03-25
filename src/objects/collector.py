@@ -2,8 +2,12 @@ import pickle
 
 from src.objects.public import Public
 from src.my_exceptions import PublicsLenException, NoValidId
+from src.settings import Settings
+
 
 class Collector:
+    settings = Settings()
+    STATE_PATH = f'{settings.STATES_PATH}{settings.PUBLICS_STATE_NAME}.pkl'
     
     def __init__(self, max_publics: int):
         self.publics = dict()
@@ -32,11 +36,11 @@ class Collector:
             await public.start()
     
     def save_state(self):
-        with open(f'states/publics.pkl', 'wb') as file:
+        with open(self.STATE_PATH, 'wb') as file:
             pickle.dump(self.publics, file=file)
     
     def load_state(self):
-        with open(f'states/publics.pkl', 'rb') as file:
+        with open(self.STATE_PATH, 'rb') as file:
             self.publics = pickle.load(file=file)
         
         for public in self.publics.values():

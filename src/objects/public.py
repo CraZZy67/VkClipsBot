@@ -1,13 +1,9 @@
-from selenium.webdriver import Chrome
-import dotenv
-
 import os
 
 from src.objects.interceptor import Interceptor
 from src.objects.video_queue import VideoQueue, DebugVideoQueue
 from src.settings import Settings
-from src.my_exceptions import (OverOneStartedException, QueueLenException, 
-                               AccessDeniedException)
+from src.my_exceptions import (OverOneStartedException, QueueLenException)
 
 
 class Public:
@@ -26,18 +22,18 @@ class Public:
         self.stop = False
     
     def synchronize(self):
-        list_dir = os.listdir('./media')
+        list_dir = os.listdir(f'./{self.settings.VIDEO_PATH[0:-1]}')
         
         if not self.inter_public in list_dir:
             self.interceptor.intercept_video()
         
-        list_media = os.listdir(f'./media/{self.inter_public}/')
+        list_media = os.listdir(f'./{self.settings.VIDEO_PATH}{self.inter_public}/')
         diff = self.settings.MAX_LEN_QUEUE - len(list_media)
         
         for i in range(diff):
             self.interceptor.intercept_video()
                  
-        for i in os.listdir(f'./media/{self.inter_public}/'):
+        for i in os.listdir(f'./{self.settings.VIDEO_PATH}{self.inter_public}/'):
             i = i.replace('.mp4', '')
             
             if not i in self.video_queue:       
@@ -50,7 +46,7 @@ class Public:
             self.started = True
             video = await self.video_queue.run_next_video(self.inter_public, 
                                                           self.public_id)
-            os.remove(f'./media/{self.inter_public}/{video}.mp4')
+            os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
             
             while True:
                 if not self.stop:
@@ -60,7 +56,7 @@ class Public:
                     video = await self.video_queue.run_next_video(self.inter_public, 
                                                                   self.public_id)
                     
-                    os.remove(f'./media/{self.inter_public}/{video}.mp4')
+                    os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
                 else:
                     self.started = False
                     break
@@ -79,7 +75,7 @@ class Public:
     def delete_video(self):
         if len(self.video_queue.queue) > 2:
             video = self.video_queue.delete_video()
-            os.remove(f'./media/{self.inter_public}/{video}.mp4')
+            os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
         else:
             raise QueueLenException
         
@@ -102,7 +98,7 @@ class DebugPublic(Public):
                 self.started = True
                 video = self.video_queue.run_next_video(self.inter_public, 
                                                         self.public_id)
-                os.remove(f'./media/{self.inter_public}/{video}.mp4')
+                os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
                 
                 while True:
                     if not self.stop:
@@ -111,7 +107,7 @@ class DebugPublic(Public):
                         video = self.video_queue.run_next_video(self.inter_public, 
                                                                 self.public_id)
                         
-                        os.remove(f'./media/{self.inter_public}/{video}.mp4')
+                        os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
                     else:
                         self.started = False
                         break

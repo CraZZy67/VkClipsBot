@@ -1,9 +1,11 @@
 class Settings:
     CREDS_PATH = 'creds/'
     VIDEO_PATH = 'media/'
+    STATES_PATH = 'states/'
     
     USERS_FILE_NAME = 'user_creds'
     ANONYM_FILE_NAME = 'anonym_creds'
+    PUBLICS_STATE_NAME = 'publics'
     
     LOGIN_LINK = 'https://login.vk.com/?act=web_token'
     

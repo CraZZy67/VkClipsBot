@@ -58,8 +58,8 @@ class VideoDownloader:
         
         down_logger.debug(f'Заголовки ответа (video): {response.headers}')
         
-        if not public_id in os.listdir('media/'):
-            os.mkdir(f'media/{public_id}')
+        if not public_id in os.listdir(self.settings.VIDEO_PATH):
+            os.mkdir(f'{self.settings.VIDEO_PATH}{public_id}')
         
         path = f'{self.settings.VIDEO_PATH}/{public_id}/{video_id}.mp4'
         with open(path, 'wb') as file:
