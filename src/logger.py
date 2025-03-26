@@ -26,13 +26,17 @@ add_hadlers(logger=down_logger)
 
 upload_logger = logging.getLogger('upload')
 add_hadlers(logger=upload_logger)
+
+bot_logger = logging.getLogger('bot')
+add_hadlers(logger=bot_logger)
 # ---------
 
 # ---------    
-auth_logger.setLevel(logging.DEBUG)
-inter_logger.setLevel(logging.DEBUG)
+auth_logger.setLevel(logging.INFO)
+inter_logger.setLevel(logging.INFO)
 down_logger.setLevel(logging.INFO)
 upload_logger.setLevel(logging.INFO)
+bot_logger.setLevel(logging.DEBUG)
 # ---------
 
 # logging.disable()

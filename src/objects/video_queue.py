@@ -5,6 +5,7 @@ import time
 from src.objects.uploader import VideoUploader
 from src.my_exceptions import QueueLenException
 from src.settings import Settings
+from src.objects.authorizer import UserAuthorizer
 
 
 class VideoQueue:
@@ -24,6 +25,7 @@ class VideoQueue:
         if self.run: 
             if len(self.queue): 
                 await sleep(float(self.interval * 60))
+                UserAuthorizer().refresh_anonym_token()
             else:
                 raise QueueLenException
             

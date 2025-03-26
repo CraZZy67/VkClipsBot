@@ -1,7 +1,7 @@
 import pickle
 
 from src.objects.public import Public
-from src.my_exceptions import PublicsLenException, NoValidIdException
+from src.my_exceptions import PublicsLenException, NoValidIdException, OverOneStartedException
 from src.settings import Settings
 
 
@@ -33,7 +33,10 @@ class Collector:
     
     async def start_publics(self):
         for public in self.publics.values():
-            await public.start()
+            try:
+                await public.start()
+            except OverOneStartedException:
+                continue
     
     def save_state(self):
         with open(self.STATE_PATH, 'wb') as file:

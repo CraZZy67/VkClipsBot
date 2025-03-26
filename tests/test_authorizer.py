@@ -42,12 +42,5 @@ class TestUserAuthorizer(unittest.TestCase):
             authorizer.enter_password(password=os.getenv('NO_VALID_PASSWORD_FOR_TEST'))
     
     def test_anonym(self):
-        driver = Chrome()
-        driver.get('https://vk.com/icollbelgu')
-        
         authorizer = UserAuthorizer()
-        
-        authorizer.driver = driver
-        authorizer.LOCAL_STORAGE_KEY = '6287487:get_anonym_token:login:auth'
-        
-        authorizer.save_session_creds(file_name='anonym_creds', out_session=True)
+        authorizer.refresh_anonym_token()

@@ -12,8 +12,10 @@ from src.my_exceptions import NoValidDataException
 
 class UserAuthorizer:
     MESSENGER_LINK = 'https://vk.com/im'
+    ANONYM_LINK = 'https://vk.com/icollbelgu'
     
     LOCAL_STORAGE_KEY = '6287487:web_token:login:auth'
+    ANONYM_LOCAL_STORAGE_KEY = '6287487:get_anonym_token:login:auth'
     
     settings = Settings()
     
@@ -83,3 +85,12 @@ class UserAuthorizer:
             pickle.dump(dict(cookie=cookie, access_token=creds['access_token']), file)
         
         self.driver.quit()
+    
+    def refresh_anonym_token(self):
+        driver = Chrome()
+        driver.get(self.ANONYM_LINK)
+
+        self.driver = driver
+        self.LOCAL_STORAGE_KEY = self.ANONYM_LOCAL_STORAGE_KEY
+
+        self.save_session_creds(file_name='anonym_creds', out_session=True)
