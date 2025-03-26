@@ -8,7 +8,6 @@ import os
 from src.settings import Settings
 from src.bot.keyboards import menu_keyboard, success_keyboard
 from src.bot.global_classes import collector
-from src.bot.utils import refresh_anonym_token
 from src.my_exceptions import (AccessDeniedException, NoValidInterPublicException,
                                NoValidOwnPublicException, NoValidVideoPathException)
 
