@@ -7,7 +7,7 @@ from time import sleep
 
 from src.settings import Settings
 from src.logger import auth_logger
-from src.my_exceptions import NoValidVerifyCodeException
+from src.my_exceptions import NoValidDataException
 
 
 class UserAuthorizer:
@@ -48,7 +48,8 @@ class UserAuthorizer:
         try:
             self.driver.find_element(By.CLASS_NAME, 'vkc__Password__Wrapper')
         except NoSuchElementException:
-            raise NoValidVerifyCodeException
+            self.driver.quit()
+            raise NoValidDataException
     
     def enter_password(self, password: str):
         div = self.driver.find_element(By.CLASS_NAME, 'vkc__Password__Wrapper')
@@ -56,6 +57,12 @@ class UserAuthorizer:
         
         div = self.driver.find_element(By.CLASS_NAME, 'vkc__EnterPasswordNoUserInfo__buttonWrap')
         div.find_element(By.TAG_NAME, 'button').click()
+        
+        try:
+            self.driver.find_element(By.CSS_SELECTOR, '[data-testid="posting_create_post_button"]')
+        except NoSuchElementException:
+            self.driver.quit()
+            raise NoValidDataException
         
         sleep(4.0)
     

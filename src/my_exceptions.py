@@ -53,7 +53,7 @@ class NoValidInterPublicException(Exception):
     def __str__(self):
         return 'Указанный паблик для отслеживания не был валиден.'
 
-class NoValidVerifyCodeException(Exception):
+class NoValidDataException(Exception):
     
     def __str__(self):
-        return 'Введенный код не валиден.'
+        return 'Введенные данные не валидны.'

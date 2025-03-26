@@ -11,6 +11,7 @@ from src.my_exceptions import QueueLenException
 
 class TestPublic(unittest.TestCase):
     
+    @unittest.skip('Автономное тестирование без асинхронной функции не возможно')
     def test_start(self):
         dotenv.load_dotenv()
         

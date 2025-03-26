@@ -31,8 +31,8 @@ add_hadlers(logger=upload_logger)
 # ---------    
 auth_logger.setLevel(logging.DEBUG)
 inter_logger.setLevel(logging.DEBUG)
-down_logger.setLevel(logging.DEBUG)
-upload_logger.setLevel(logging.DEBUG)
+down_logger.setLevel(logging.INFO)
+upload_logger.setLevel(logging.INFO)
 # ---------
 
 # logging.disable()

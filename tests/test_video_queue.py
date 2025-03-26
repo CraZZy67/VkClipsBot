@@ -8,6 +8,8 @@ from src.my_exceptions import QueueLenException
 
 
 class TestVideoQueue(unittest.TestCase):
+    
+    @unittest.skip('При автономном тестировании будет флудить в группу.')
     def test_main(self):
         dotenv.load_dotenv()
         
@@ -31,7 +33,8 @@ class TestVideoQueue(unittest.TestCase):
         ex.add_video(os.getenv('VIDEO_ID_FOR_TEST'))
         
         ex.run = False
-        ex.run_next_video()
+        ex.run_next_video(os.getenv('PUBLIC_ID_FOR_TEST'),
+                          os.getenv('OWN_TEST_PUBLIC_ID'))
         
         print('Остановленно')
     

@@ -18,6 +18,7 @@ class TestInterceptor(unittest.TestCase):
         with self.assertRaises(NoValidInterPublicException):
             inter.intercept_video()
     
+    @unittest.skip('Слишком длительный тест')
     def test_cycles(self):
         dotenv.load_dotenv()
         

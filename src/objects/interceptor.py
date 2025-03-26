@@ -50,6 +50,8 @@ class Interceptor:
             
             for i in ids:
                 if not i in self.inted_video:
+                    inter_logger.debug(f'Видео которое будет загружено: {i}')
+                    
                     self.DOWNLOADER.download(public_id=self.inter_public, video_id=i)
                     self.inted_video.append(i)
                     return i

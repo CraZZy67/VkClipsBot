@@ -8,6 +8,8 @@ from src.my_exceptions import NoValidOwnPublicException, NoValidVideoPathExcepti
 
 
 class TestUploader(unittest.TestCase):
+    
+    @unittest.skip('При автономном тестировании будет флудить в группу.')
     def test_upload(self):
         dotenv.load_dotenv()
         
