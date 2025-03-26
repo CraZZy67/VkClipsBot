@@ -36,23 +36,27 @@ async def stop_handler(callback: CallbackQuery):
 
 @menu_router.callback_query(F.data == 'start_all')
 async def start_pablics_handler(callback: CallbackQuery):
-    if len(collector.publics):
+    if len(collector.publics) and len(os.listdir(f'./{settings.CREDS_PATH}')) == 2:
         try:
             await collector.start_publics()
         except AccessDeniedException as ex:
             await callback.message.answer(f'Произошла ошибка доступа у паблика: {ex.public_id}.')
+            return None
         except NoValidInterPublicException as ex:
             await callback.message.answer(f'У паблика {ex.public_id} был не правильно введен паблик для отслеживания.')
+            return None
         except NoValidOwnPublicException as ex:
             await callback.message.answer(f'У паблика {ex.public_id} был не правильно введен его ID.')
+            return None
         except NoValidVideoPathException as ex:
             await callback.message.answer(f'Ошибка пути у паблика {ex.public_id}. Попробуйте перепроверить его данные.')
+            return None
             
         await callback.message.answer('Все паблики были запущенны.', 
                                       reply_markup=success_keyboard())
         await callback.answer()
     else:
-        await callback.message.answer('У вас еще нет созданных пабликов',
+        await callback.message.answer('У вас еще нет созданных пабликов или вы еще не были авторизованны.',
                                       reply_markup=success_keyboard())
         await callback.answer()
 

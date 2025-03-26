@@ -45,6 +45,7 @@ try:
                 bot_logger.error('Ошибка функции отправки кода верификации: {ex}')
                 await message.answer('Произошла неожиданная ошибка, попробуйте перезапустить авторизацию.')
                 await message.answer(Settings.START_TXT, reply_markup=menu_keyboard())
+                return None
                 
             await message.answer('К вам на телефон был отправлен код, введите его.')
             await message.answer('Если код не придет в течении пары минут, введите "retry".')
@@ -71,6 +72,7 @@ try:
                 bot_logger.error('Ошибка функции ввода кода верификации: {ex}')
                 await message.answer('Произошла ошибка, попробуйте перезапустить авторизацию. Внимательней введите данные.')
                 await message.answer(Settings.START_TXT, reply_markup=menu_keyboard())
+                return None
             
             await message.answer('Теперь введите пароль.')
             await state.set_state(Auth.password)
@@ -89,6 +91,7 @@ try:
             bot_logger.error('Ошибка функции ввода пароля: {ex}')
             await message.answer('Произошла ошибка, попробуйте перезапустить авторизацию. Внимательней введите данные.')
             await message.answer(Settings.START_TXT, reply_markup=menu_keyboard())
+            return None
             
         await state.clear()
         await message.answer('Поздравляю! Авторизация прошла успешно.')

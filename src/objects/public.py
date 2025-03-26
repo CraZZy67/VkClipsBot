@@ -96,6 +96,7 @@ class Public:
                     os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
                 else:
                     self.started = False
+                    self.stop = False
                     break
         else:
             raise OverOneStartedException

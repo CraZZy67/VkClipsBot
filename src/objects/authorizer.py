@@ -20,12 +20,12 @@ class UserAuthorizer:
     settings = Settings()
     
     def __init__(self, headless: bool = True):
-        options = ChromeOptions()
+        self.options = ChromeOptions()
         
         if headless:
-            options.add_argument('--headless')
+            self.options.add_argument('--headless')
             
-        self.driver = Chrome(options=options)
+        self.driver = Chrome(options=self.options)
         self.driver.implicitly_wait(15.0)
     
     def send_verify_code(self, phone_number: str):
@@ -50,7 +50,6 @@ class UserAuthorizer:
         try:
             self.driver.find_element(By.CLASS_NAME, 'vkc__Password__Wrapper')
         except NoSuchElementException:
-            self.driver.quit()
             raise NoValidDataException
     
     def enter_password(self, password: str):
@@ -63,7 +62,6 @@ class UserAuthorizer:
         try:
             self.driver.find_element(By.CSS_SELECTOR, '[data-testid="posting_create_post_button"]')
         except NoSuchElementException:
-            self.driver.quit()
             raise NoValidDataException
         
         sleep(4.0)
@@ -87,10 +85,13 @@ class UserAuthorizer:
         self.driver.quit()
     
     def refresh_anonym_token(self):
-        driver = Chrome()
-        driver.get(self.ANONYM_LINK)
+        try:
+            driver = Chrome(options=self.options)
+            driver.get(self.ANONYM_LINK)
 
-        self.driver = driver
-        self.LOCAL_STORAGE_KEY = self.ANONYM_LOCAL_STORAGE_KEY
+            self.driver = driver
+            self.LOCAL_STORAGE_KEY = self.ANONYM_LOCAL_STORAGE_KEY
 
-        self.save_session_creds(file_name='anonym_creds', out_session=True)
+            self.save_session_creds(file_name='anonym_creds', out_session=True)
+        finally:
+            self.driver.quit()

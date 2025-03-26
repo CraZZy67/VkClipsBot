@@ -21,42 +21,44 @@ class VideoUploader:
     TIMEOUT = 300.0
     
     def upload(self, own_public: str, inter_public: str, video_id: str, headless: bool = True):
-        dotenv.load_dotenv()
-        
-        driver = self.get_driver(headless=headless)
-        driver.get(self.DOMAIN + own_public)
-        
-        self.refresh_cookie(driver)
-        driver.get(self.DOMAIN + own_public)
-        
-        upload_logger.debug(f'Cookie на текущей странице: {[(x['name'], x['domain']) for x in driver.get_cookies()]}')
-        
         try:
-            button = driver.find_element(By.CSS_SELECTOR, '[data-testid="posting_create_clip_button"]')
-        except NoSuchElementException as ex:
-            raise NoValidOwnPublicException
+            dotenv.load_dotenv()
             
-        button.click()
-        
-        input = driver.find_element(By.CSS_SELECTOR, '[data-testid="video_upload_select_file"]')
-        file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{inter_public}/{video_id}.mp4'
-        try:
-            input.send_keys(file_path)
-        except InvalidArgumentException:
-            raise NoValidVideoPathException
-        
-        button = driver.find_element(By.CSS_SELECTOR, '[data-testid="clips-uploadForm-publish-button"]')
-        wait = WebDriverWait(driver, timeout=self.TIMEOUT)
-        
-        try:
-            wait.until(lambda _ : button.is_enabled())
-        except StaleElementReferenceException:
+            driver = self.get_driver(headless=headless)
+            driver.get(self.DOMAIN + own_public)
+            
+            self.refresh_cookie(driver)
+            driver.get(self.DOMAIN + own_public)
+            
+            upload_logger.debug(f'Cookie на текущей странице: {[(x['name'], x['domain']) for x in driver.get_cookies()]}')
+            
+            try:
+                button = driver.find_element(By.CSS_SELECTOR, '[data-testid="posting_create_clip_button"]')
+            except NoSuchElementException as ex:
+                raise NoValidOwnPublicException
+                
+            button.click()
+            
+            input = driver.find_element(By.CSS_SELECTOR, '[data-testid="video_upload_select_file"]')
+            file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{inter_public}/{video_id}.mp4'
+            try:
+                input.send_keys(file_path)
+            except InvalidArgumentException:
+                raise NoValidVideoPathException
+            
             button = driver.find_element(By.CSS_SELECTOR, '[data-testid="clips-uploadForm-publish-button"]')
-            ActionChains(driver=driver).click(button).perform()
+            wait = WebDriverWait(driver, timeout=self.TIMEOUT)
             
-            time.sleep(1.0)
+            try:
+                wait.until(lambda _ : button.is_enabled())
+            except StaleElementReferenceException:
+                button = driver.find_element(By.CSS_SELECTOR, '[data-testid="clips-uploadForm-publish-button"]')
+                ActionChains(driver=driver).click(button).perform()
+                
+                time.sleep(1.0)
             
-        driver.quit()
+        finally:
+            driver.quit()
          
     def get_driver(self, headless: bool) -> Chrome:
         options = ChromeOptions()

@@ -1,5 +1,8 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+from src.bot.global_classes import collector
+from src.bot.collback_factory import PublicsFactory
+
 
 def menu_keyboard():
     builder = InlineKeyboardBuilder()
@@ -19,5 +22,17 @@ def success_keyboard():
     builder.button(text='Понятно', callback_data='success')
     return builder.as_markup()
     
+def publics_keyboard():
+    builder = InlineKeyboardBuilder()
     
+    for k, v in collector.publics.items():
+        builder.button(text=f'Public {k} - {v.public_id}', 
+                       callback_data=PublicsFactory(id=k))
+    
+    builder.button(text='Добавить паблик', callback_data='add_pub')
+    builder.button(text='Удалить паблик', callback_data='delete_pub')
+    builder.button(text='Назад', callback_data='back')
+    
+    builder.adjust(2, repeat=True)
+    return builder.as_markup()
     
