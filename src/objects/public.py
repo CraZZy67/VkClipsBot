@@ -51,7 +51,7 @@ class Public:
         for i in os.listdir(f'./{self.settings.VIDEO_PATH}{self.inter_public}/'):
             i = i.replace('.mp4', '')
             
-            if not i in self.video_queue:       
+            if not i in self.video_queue.queue:       
                 self.video_queue.add_video(i)         
                         
     async def start(self):

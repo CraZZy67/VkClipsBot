@@ -23,7 +23,7 @@ class Collector:
     
     def stop_publics(self):
         for public in self.publics.values():
-            public.stop = False
+            public.stop = True
             
     def delete_public(self, id: str) -> Public:
         return self.publics.pop(id)

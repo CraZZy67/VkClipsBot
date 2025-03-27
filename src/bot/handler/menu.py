@@ -1,6 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery, FSInputFile
 from aiogram.filters import CommandStart
+from asyncio import create_task
 import dotenv
 
 import os
@@ -8,6 +9,7 @@ import os
 from src.settings import Settings
 from src.bot.keyboards import menu_keyboard, success_keyboard
 from src.bot.global_classes import collector
+from src.logger import bot_logger
 from src.my_exceptions import (AccessDeniedException, NoValidInterPublicException,
                                NoValidOwnPublicException, NoValidVideoPathException)
 
@@ -30,35 +32,38 @@ async def stop_handler(callback: CallbackQuery):
                                       reply_markup=success_keyboard())
         await callback.answer()
     else:
-        await callback.message.answer('У вас еще нет созданных пабликов',
-                                      reply_markup=success_keyboard())
+        await callback.answer('У вас еще нет созданных пабликов')
         await callback.answer()
 
 @menu_router.callback_query(F.data == 'start_all')
 async def start_pablics_handler(callback: CallbackQuery):
-    if len(collector.publics) and len(os.listdir(f'./{settings.CREDS_PATH}')) == 2:
-        try:
-            await collector.start_publics()
-        except AccessDeniedException as ex:
-            await callback.message.answer(f'Произошла ошибка доступа у паблика: {ex.public_id}.')
-            return None
-        except NoValidInterPublicException as ex:
-            await callback.message.answer(f'У паблика {ex.public_id} был не правильно введен паблик для отслеживания.')
-            return None
-        except NoValidOwnPublicException as ex:
-            await callback.message.answer(f'У паблика {ex.public_id} был не правильно введен его ID.')
-            return None
-        except NoValidVideoPathException as ex:
-            await callback.message.answer(f'Ошибка пути у паблика {ex.public_id}. Попробуйте перепроверить его данные.')
-            return None
+    try:
+        if len(collector.publics) and len(os.listdir(f'./{settings.CREDS_PATH}')) == 2:
+            create_task(collector.start_publics())
             
-        await callback.message.answer('Все паблики были запущенны.', 
-                                      reply_markup=success_keyboard())
+            await callback.message.answer('Все паблики были запущенны.', 
+                                        reply_markup=success_keyboard())
+            await callback.answer()
+        else:
+            await callback.answer('У вас еще нет созданных пабликов')
+            
+    except AccessDeniedException as ex:
+        await callback.message.answer(f'Произошла ошибка доступа у паблика: {ex.public_id}.')
+        
+    except NoValidInterPublicException as ex:
+        await callback.message.answer(f'У паблика {ex.public_id} был не правильно введен паблик для отслеживания.')
+        
+    except NoValidOwnPublicException as ex:
+        await callback.message.answer(f'У паблика {ex.public_id} был не правильно введен его ID.')
+        
+    except NoValidVideoPathException as ex:
+        await callback.message.answer(f'Ошибка пути у паблика {ex.public_id}. Попробуйте перепроверить его данные.')
+        
+    except Exception as ex:
+        bot_logger.error(f'Произошла ошибка: {ex}')
         await callback.answer()
-    else:
-        await callback.message.answer('У вас еще нет созданных пабликов или вы еще не были авторизованны.',
-                                      reply_markup=success_keyboard())
-        await callback.answer()
+        await callback.message.answer('Произошла неожиданная ошибка, попробуйте позже.')
+
 
 @menu_router.callback_query(F.data == 'save_state')
 async def save_sate_handler(callback: CallbackQuery):

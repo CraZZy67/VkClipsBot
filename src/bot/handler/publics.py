@@ -6,7 +6,7 @@ import os
 
 from src.bot.global_classes import collector
 from src.bot.utils import create_str_public_list
-from src.bot.keyboards import publics_keyboard, menu_keyboard, success_keyboard
+from src.bot.keyboards import publics_keyboard, menu_keyboard
 from src.settings import Settings
 from src.bot.fsm import AddPublic
 from src.objects.interceptor import Interceptor
@@ -29,8 +29,7 @@ async def publics_handler(callback: CallbackQuery):
             
         await callback.message.edit_text(text=text, reply_markup=publics_keyboard())
     else:
-        await callback.message.answer('Пожалуйста, сначала пройдите авторизацию!', 
-                                      reply_markup=success_keyboard())
+        await callback.answer('Cначала пройдите авторизацию')
         
 @publics_router.callback_query(F.data == 'back')
 async def back_handler(callback: CallbackQuery):
@@ -77,31 +76,32 @@ async def catch_interval_handler(message: Message, state: FSMContext):
 
 @publics_router.message(AddPublic.id)
 async def catch_id_handler(message: Message, state: FSMContext):
-    if message.text.isdigit():
-        data = await state.get_data()
-        try:
+    try:
+        if message.text.isdigit():
+            data = await state.get_data()
+            
             collector.add_public(Public(data['public_id'], Interceptor(data['inter_public_id']), 
                                         VideoQueue(data['interval'])), message.text)
-        except NoValidIdException:
-            await message.answer('Вы ввели уже существующий id, попробуйте снова.')
-            return None
-        except PublicsLenException:
-            await message.answer('Достигнуто максимальное количество пабликов.')
-            await state.clear()
-            await message.answer(text=settings.START_TXT, reply_markup=menu_keyboard())
-            return None
-            
-        state.clear()    
-        collector.save_state()
-        
-        try:
+                
+            state.clear()    
+            collector.save_state()
+
             UserAuthorizer().refresh_anonym_token()
-        except Exception:
-            await state.clear()
+            
+            await message.answer('Паблик успешно добавлен!')
             await message.answer(text=settings.START_TXT, reply_markup=menu_keyboard())
-            return None
+        else:
+            await message.answer('Вы не правильно ввели id, попробуйте еще раз.')
+            
+    except NoValidIdException:
+        await message.answer('Вы ввели уже существующий id, попробуйте снова.')
         
-        await message.answer('Паблик успешно добавлен!')
+    except PublicsLenException:
+        await state.clear()
+        await message.answer('Достигнуто максимальное количество пабликов.')
         await message.answer(text=settings.START_TXT, reply_markup=menu_keyboard())
-    else:
-        await message.answer('Вы не правильно ввели id, попробуйте еще раз.')
+        
+    except Exception:
+        await state.clear()
+        await message.answer('Произошла неожиданная ошибка, попробуйте позже.')
+        await message.answer(text=settings.START_TXT, reply_markup=menu_keyboard())

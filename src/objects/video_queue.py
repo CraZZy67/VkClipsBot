@@ -25,7 +25,7 @@ class VideoQueue:
     async def run_next_video(self, inter_public: str, own_public: str) -> str:
         if self.run: 
             if len(self.queue):
-                self.started_time = datetime.now().strftime('%d.%m.%Y %H:%M:%S')
+                self.started_time = datetime.now()
                 
                 await sleep(float(self.interval * 60))
                 UserAuthorizer().refresh_anonym_token()

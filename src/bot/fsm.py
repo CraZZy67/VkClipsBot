@@ -10,3 +10,6 @@ class AddPublic(StatesGroup):
     inter_public_id: str = State()
     interval: int = State()
     id: str = State()
+
+class DeletePublic(StatesGroup):
+    id: str = State()
