@@ -13,3 +13,8 @@ class AddPublic(StatesGroup):
 
 class DeletePublic(StatesGroup):
     id: str = State()
+
+class ChangeInter(StatesGroup):
+    id: str = State()
+    id_data: str = None
+    

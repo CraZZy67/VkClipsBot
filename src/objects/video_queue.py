@@ -1,5 +1,5 @@
 from collections import deque
-from asyncio import sleep
+import asyncio
 from datetime import datetime
 import time
 
@@ -27,7 +27,10 @@ class VideoQueue:
             if len(self.queue):
                 self.started_time = datetime.now()
                 
-                await sleep(float(self.interval * 60))
+                print('B')
+                await asyncio.sleep(float(self.interval * 60))
+                print('A')
+                
                 UserAuthorizer().refresh_anonym_token()
             else:
                 raise QueueLenException
@@ -55,7 +58,10 @@ class DebugVideoQueue(VideoQueue):
     def run_next_video(self, inter_public: str, own_public: str) -> str:
         if self.run: 
             if len(self.queue): 
+                self.started_time = datetime.now()
+                
                 time.sleep(float(self.interval * 60))
+                UserAuthorizer().refresh_anonym_token()
             else:
                 raise QueueLenException
             

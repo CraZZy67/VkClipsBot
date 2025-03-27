@@ -27,12 +27,25 @@ def publics_keyboard():
     
     for k, v in collector.publics.items():
         builder.button(text=f'Public {k} - {v.public_id}', 
-                       callback_data=PublicsFactory(id=k))
+                       callback_data=PublicsFactory(id=k, info='public'))
     
     builder.button(text='Добавить паблик', callback_data='add_pub')
     builder.button(text='Удалить паблик', callback_data='delete_pub')
     builder.button(text='Назад', callback_data='back')
     
     builder.adjust(2, repeat=True)
+    return builder.as_markup()
+
+def current_keyboard(public_id: str):
+    builder = InlineKeyboardBuilder()
+    
+    builder.button(text='Старт', callback_data=PublicsFactory(id=public_id, info='start'))
+    builder.button(text='Стоп', callback_data=PublicsFactory(id=public_id, info='stop'))
+    builder.button(text='Видео очередь', callback_data=PublicsFactory(id=public_id, info='video_queue'))
+    builder.button(text='Изменить паблик для отслеживания', callback_data=PublicsFactory(id=public_id, info='change_inter_public'))
+    builder.button(text='Назад', callback_data='back')
+    
+    builder.adjust(3, 1, 1)
+    
     return builder.as_markup()
     

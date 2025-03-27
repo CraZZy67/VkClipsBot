@@ -57,7 +57,6 @@ class Public:
     async def start(self):
         if not self.started:
             self.synchronize()
-            
             self.started = True
             try:
                 video = await self.video_queue.run_next_video(self.inter_public, 

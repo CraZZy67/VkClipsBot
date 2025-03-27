@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
 
 from src.bot.global_classes import collector
+from src.objects.public import Public
 
 
-def create_str_public_list():
+def create_str_public_list() -> str:
     string = 'ID | PUBLIC ID | STATUS | TIME LEFT (h:m:s)\n\n'
     sep = '———————————————'
     
@@ -14,14 +15,45 @@ def create_str_public_list():
             status = 'started'
         else:
             status = 'stoped'
-            string += f'{k} - {v.public_id} {sep} {status}\n\n'
+            string += f'{k} - {v.public_id} {sep} {status} N\\A\n\n'
             continue
         
-        target_time = v.video_queue.started_time + timedelta(minutes=int(v.video_queue.interval))
-        time_left = str(target_time - datetime.now())
-        time_left = time_left[:time_left.find('.')]
-            
+        time_left = get_time_left(v.video_queue.started_time, v.video_queue.interval)
         string += f'{k} - {v.public_id} {sep} {status} {time_left}\n\n'
         
+    return string
+
+def get_time_left(started_time: datetime, interval: str) -> str:
+    target_time = started_time + timedelta(minutes=int(interval))
+    time_left = str(target_time - datetime.now())
+    
+    return time_left[:time_left.find('.')]
+
+def create_public_info(public: Public) -> str:
+    sep = '—————————————————————'
+    string = 'ИНФОРМАЦИЯ О ПАБЛИКЕ\n\n'
+    
+    if public.stop:
+        status = 'stoping'
+    elif public.started:
+        status = 'started'
+    else:
+        status = 'stoped'
+    
+    string += f'Паблик id: {public.public_id}\n'
+    string += sep + '\n'
+    string += f'Отслеживаемый паблик: {public.inter_public}'
+    string += sep + '\n'
+    
+    if status == 'stoped':
+        string += 'Оствашееся время: N\\A'
+    else:
+        time_left = get_time_left(public.video_queue.started_time,
+                              public.video_queue.interval)
+        string += f'Оствашееся время: {time_left}'
+    
+    string += sep + '\n'
+    string += f'Статус: {status}'
+    
     return string
         

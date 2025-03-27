@@ -67,7 +67,7 @@ async def catch_inter_public_id_handler(message: Message, state: FSMContext):
 @publics_router.message(AddPublic.interval)
 async def catch_interval_handler(message: Message, state: FSMContext):
     if message.text.isdigit():
-        await state.update_data(interval=message.text)
+        await state.update_data(interval=int(message.text))
         await state.set_state(AddPublic.id)
         
         await message.answer('Введите индивидуальный id паблика.')

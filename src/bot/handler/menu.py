@@ -39,11 +39,11 @@ async def stop_handler(callback: CallbackQuery):
 async def start_pablics_handler(callback: CallbackQuery):
     try:
         if len(collector.publics) and len(os.listdir(f'./{settings.CREDS_PATH}')) == 2:
-            create_task(collector.start_publics())
-            
             await callback.message.answer('Все паблики были запущенны.', 
                                         reply_markup=success_keyboard())
             await callback.answer()
+            
+            create_task(collector.start_publics())
         else:
             await callback.answer('У вас еще нет созданных пабликов')
             
