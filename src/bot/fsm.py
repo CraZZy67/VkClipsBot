@@ -17,4 +17,11 @@ class DeletePublic(StatesGroup):
 class ChangeInter(StatesGroup):
     id: str = State()
     id_data: str = None
-    
+
+class AddVideo(StatesGroup):
+    id: str = State()
+    id_data: str = None
+
+class ChangeInterval(StatesGroup):
+    interval: str = State()
+    id_data: str = None

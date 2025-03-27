@@ -67,8 +67,8 @@ class Public:
             except NoValidVideoPathException:
                 self.started = False
                 raise NoValidVideoPathException(public_id=self.public_id)
-            
-            os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
+            if video:
+                os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
             
             while True:
                 if not self.stop:
@@ -92,7 +92,8 @@ class Public:
                         self.started = False
                         raise NoValidVideoPathException(public_id=self.public_id)
                     
-                    os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
+                    if video:
+                        os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
                 else:
                     self.started = False
                     self.stop = False

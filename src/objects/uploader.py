@@ -18,7 +18,7 @@ class VideoUploader:
     settings = Settings()
     
     DOMAIN = 'https://vk.com/'
-    TIMEOUT = 300.0
+    TIMEOUT = 500.0
     
     def upload(self, own_public: str, inter_public: str, video_id: str, headless: bool = True):
         try:

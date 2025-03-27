@@ -18,6 +18,7 @@ class VideoQueue:
         
         self.queue = deque(maxlen=self.settings.MAX_LEN_QUEUE)
         self.run = True
+        self.started_time = None
     
     def add_video(self, video_id: str):
         self.queue.appendleft(video_id)

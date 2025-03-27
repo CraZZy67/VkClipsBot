@@ -48,4 +48,16 @@ def current_keyboard(public_id: str):
     builder.adjust(3, 1, 1)
     
     return builder.as_markup()
+
+def queue_keyboard(public_id: str):
+    builder = InlineKeyboardBuilder()
     
+    
+    builder.button(text='Добавить видео', callback_data=PublicsFactory(id=public_id, info='add_video'))
+    builder.button(text='Удалить видео', callback_data=PublicsFactory(id=public_id, info='del_video'))
+    builder.button(text='Изменить интервал', callback_data=PublicsFactory(id=public_id, info='change_interval'))
+    builder.button(text='Стоп', callback_data=PublicsFactory(id=public_id, info='stop_video'))
+    builder.button(text='Назад', callback_data=PublicsFactory(id=public_id, info='back_pub'))
+    
+    builder.adjust(2, 1, 1, 1)
+    return builder.as_markup()

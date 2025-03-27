@@ -7,10 +7,12 @@ from src.bot.handler.authorization import auth_router
 from src.bot.handler.publics import publics_router
 from src.bot.handler.delete import delete_router
 from src.bot.handler.current import current_router
+from src.bot.handler.queue import queue_router
+
 
 
 dp.include_routers(menu_router, auth_router, publics_router, 
-                   delete_router, current_router)
+                   delete_router, current_router, queue_router)
 
 
 async def main():

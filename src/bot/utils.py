@@ -56,4 +56,23 @@ def create_public_info(public: Public) -> str:
     string += f'Статус: {status}'
     
     return string
-        
+
+def create_queue_info(public: Public) -> str:
+    sep = '—————————————————————'
+    string = 'ИНФОРМАЦИЯ О ВИДЕО ОЧЕРЕДИ\n\n'
+    
+    string += f'Интервал: {public.video_queue.interval} мин\n'
+    string += sep + '\n'
+    string += 'Очередь: '
+    
+    if len(public.video_queue.queue):
+        for i, v in enumerate(public.video_queue.queue):
+            string += f'{i} - {str(v)[6:]}; '
+        string += '\n'
+    else:
+        string += 'empty\n'
+            
+    string += sep + '\n'
+    status = 'Will be started' if public.video_queue.run else 'Will be stoped'
+    string += f'Cтатус: {status}'
+    return string

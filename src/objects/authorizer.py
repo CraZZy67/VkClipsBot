@@ -88,6 +88,7 @@ class UserAuthorizer:
         try:
             driver = Chrome(options=self.options)
             driver.get(self.ANONYM_LINK)
+            sleep(2.0)
 
             self.driver = driver
             self.LOCAL_STORAGE_KEY = self.ANONYM_LOCAL_STORAGE_KEY

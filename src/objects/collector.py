@@ -1,3 +1,4 @@
+from asyncio import create_task
 import pickle
 
 from src.objects.public import Public
@@ -34,7 +35,7 @@ class Collector:
     async def start_publics(self):
         for public in self.publics.values():
             try:
-                await public.start()
+                create_task(public.start())
             except OverOneStartedException:
                 continue
     

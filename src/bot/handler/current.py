@@ -5,8 +5,8 @@ from aiogram.fsm.context import FSMContext
 from asyncio import create_task
 
 from src.bot.collback_factory import PublicsFactory
-from src.bot.utils import create_public_info
-from src.bot.keyboards import current_keyboard
+from src.bot.utils import create_public_info, create_queue_info
+from src.bot.keyboards import current_keyboard, queue_keyboard
 from src.bot.global_classes import collector
 from src.logger import bot_logger
 from src.bot.fsm import ChangeInter
@@ -70,7 +70,9 @@ async def cancel_pub_handler(message: Message, state: FSMContext):
 @current_router.message(ChangeInter.id)
 async def catch_id_cur_handler(message: Message, state: FSMContext):
     if message.text[0] == '-' and message.text[1:].isdigit():
-        collector.get_public(ChangeInter.id_data).inter_public = message.text
+        public = collector.get_public(ChangeInter.id_data)
+        public.inter_public = message.text
+        public.interceptor.inter_public = message.text
         
         await state.clear()
         await message.answer('Отслеживаемый паблик был успешно изменен.')
@@ -81,4 +83,5 @@ async def catch_id_cur_handler(message: Message, state: FSMContext):
 
 @current_router.callback_query(PublicsFactory.filter(F.info == 'video_queue'))
 async def video_queue_handler(callback: CallbackQuery, callback_data: PublicsFactory):
-    await callback.answer('В разработке')
+    await callback.message.edit_text(create_queue_info(collector.get_public(callback_data.id)), 
+                                     reply_markup=queue_keyboard(callback_data.id))
