@@ -1,7 +1,16 @@
+import dotenv
+
+import os
+
+
 class Settings:
-    CREDS_PATH = 'creds/'
-    VIDEO_PATH = 'media/'
-    STATES_PATH = 'states/'
+    dotenv.load_dotenv()
+
+    sl = os.getenv('SLESH')
+    
+    CREDS_PATH = f'creds{sl}'
+    VIDEO_PATH = f'media{sl}'
+    STATES_PATH = f'states{sl}'
     
     USERS_FILE_NAME = 'user_creds'
     ANONYM_FILE_NAME = 'anonym_creds'

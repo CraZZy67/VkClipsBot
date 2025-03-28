@@ -1,3 +1,5 @@
+import dotenv
+
 import os
 
 from src.objects.interceptor import Interceptor
@@ -25,7 +27,11 @@ class Public:
         self.stop = False
     
     def synchronize(self):
-        list_dir = os.listdir(f'./{self.settings.VIDEO_PATH[0:-1]}')
+        dotenv.load_dotenv()
+
+        sl = os.getenv('SLESH')
+        
+        list_dir = os.listdir(f'.{sl}{self.settings.VIDEO_PATH[0:-1]}')
         
         if not self.inter_public in list_dir:
             try:
@@ -36,7 +42,7 @@ class Public:
             except NoValidInterPublicException:
                 raise NoValidInterPublicException(public_id=self.public_id)
             
-        list_media = os.listdir(f'./{self.settings.VIDEO_PATH}{self.inter_public}/')
+        list_media = os.listdir(f'.{sl}{self.settings.VIDEO_PATH}{self.inter_public}/')
         diff = self.settings.MAX_LEN_QUEUE - len(list_media)
         
         for i in range(diff):
@@ -48,13 +54,17 @@ class Public:
             except NoValidInterPublicException:
                 raise NoValidInterPublicException(public_id=self.public_id)
                  
-        for i in os.listdir(f'./{self.settings.VIDEO_PATH}{self.inter_public}/'):
+        for i in os.listdir(f'.{sl}{self.settings.VIDEO_PATH}{self.inter_public}/'):
             i = i.replace('.mp4', '')
             
             if not i in self.video_queue.queue:       
                 self.video_queue.add_video(i)         
                         
     async def start(self):
+        dotenv.load_dotenv()
+
+        sl = os.getenv('SLESH')
+        
         if not self.started:
             self.synchronize()
             self.started = True
@@ -68,7 +78,7 @@ class Public:
                 self.started = False
                 raise NoValidVideoPathException(public_id=self.public_id)
             if video:
-                os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
+                os.remove(f'.{sl}{self.settings.VIDEO_PATH}{self.inter_public}{sl}{video}.mp4')
             
             while True:
                 if not self.stop:
@@ -93,7 +103,7 @@ class Public:
                         raise NoValidVideoPathException(public_id=self.public_id)
                     
                     if video:
-                        os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
+                        os.remove(f'.{sl}{self.settings.VIDEO_PATH}{self.inter_public}{sl}{video}.mp4')
                 else:
                     self.started = False
                     self.stop = False
@@ -117,9 +127,13 @@ class Public:
             raise QueueLenException
     
     def delete_video(self):
+        dotenv.load_dotenv()
+
+        sl = os.getenv('SLESH')
+        
         if len(self.video_queue.queue) > 2:
             video = self.video_queue.delete_video()
-            os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
+            os.remove(f'.{sl}{self.settings.VIDEO_PATH}{self.inter_public}{sl}{video}.mp4')
         else:
             raise QueueLenException
         
@@ -136,6 +150,10 @@ class DebugPublic(Public):
             self.stop = False
         
         def start(self):
+            dotenv.load_dotenv()
+
+            sl = os.getenv('SLESH')
+        
             if not self.started:
                 self.synchronize()
                 
@@ -150,7 +168,7 @@ class DebugPublic(Public):
                     self.started = False
                     raise NoValidVideoPathException(public_id=self.public_id)
                 
-                os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
+                os.remove(f'.{sl}{self.settings.VIDEO_PATH}{self.inter_public}{sl}{video}.mp4')
                 
                 while True:
                     if not self.stop:
@@ -174,7 +192,7 @@ class DebugPublic(Public):
                             self.started = False
                             raise NoValidVideoPathException(public_id=self.public_id)
                         
-                        os.remove(f'./{self.settings.VIDEO_PATH}{self.inter_public}/{video}.mp4')
+                        os.remove(f'.{sl}{self.settings.VIDEO_PATH}{self.inter_public}{sl}{video}.mp4')
                     else:
                         self.started = False
                         break

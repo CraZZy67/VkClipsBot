@@ -23,6 +23,8 @@ class VideoUploader:
     def upload(self, own_public: str, inter_public: str, video_id: str, headless: bool = True):
         try:
             dotenv.load_dotenv()
+
+            sl = os.getenv('SLESH')
             
             driver = self.get_driver(headless=headless)
             driver.get(self.DOMAIN + own_public)
@@ -40,7 +42,7 @@ class VideoUploader:
             button.click()
             
             input = driver.find_element(By.CSS_SELECTOR, '[data-testid="video_upload_select_file"]')
-            file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{inter_public}/{video_id}.mp4'
+            file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{inter_public}{sl}{video_id}.mp4'
             try:
                 input.send_keys(file_path)
             except InvalidArgumentException:
@@ -73,7 +75,10 @@ class VideoUploader:
         return driver
         
     def refresh_cookie(self, driver: Chrome):
-        path = f'{self.settings.CREDS_PATH}/{self.settings.USERS_FILE_NAME}.pkl'
+        dotenv.load_dotenv()
+
+        sl = os.getenv('SLESH')
+        path = f'{self.settings.CREDS_PATH}{sl}{self.settings.USERS_FILE_NAME}.pkl'
         with open(path, 'rb') as file:
             self.creds = pickle.load(file)
         

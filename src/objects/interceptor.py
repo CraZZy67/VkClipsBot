@@ -1,7 +1,9 @@
 import requests
+import dotenv
 
 import pickle
 from time import sleep
+import os
 
 from src.objects.downloader import VideoDownloader
 from src.settings import Settings
@@ -92,7 +94,11 @@ class Interceptor:
         return response.json()
     
     def refresh_creds(self):
-        path = f'{self.settings.CREDS_PATH}/{self.settings.ANONYM_FILE_NAME}.pkl'
+        dotenv.load_dotenv()
+
+        sl = os.getenv('SLESH')
+        
+        path = f'{self.settings.CREDS_PATH}{sl}{self.settings.ANONYM_FILE_NAME}.pkl'
         with open(path, 'rb') as file:
             self.creds = pickle.load(file)
             
