@@ -67,7 +67,7 @@ def create_queue_info(public: Public) -> str:
     
     if len(public.video_queue.queue):
         for i, v in enumerate(public.video_queue.queue):
-            string += f'{i} - {str(v)[6:]}; '
+            string += f'{i} - {str(v)[-3:]}; '
         string += '\n'
     else:
         string += 'empty\n'

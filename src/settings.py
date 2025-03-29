@@ -12,6 +12,9 @@ class Settings:
     VIDEO_PATH = f'media{SLESH}'
     STATES_PATH = f'states{SLESH}'
     
+    PREFIX_DIR = 'pub'
+    PREFIX_FILE = 'vid'
+    
     USERS_FILE_NAME = 'user_creds'
     ANONYM_FILE_NAME = 'anonym_creds'
     PUBLICS_STATE_NAME = 'publics'

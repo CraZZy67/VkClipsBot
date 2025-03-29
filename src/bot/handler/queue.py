@@ -47,11 +47,13 @@ async def catch_video_id_handler(message: Message, state: FSMContext):
         await message.answer(f'Произошла ошибка доступа у паблика: {ex.public_id}.')
         await message.answer(create_queue_info(collector.get_public(AddVideo.id_data)), 
                                      reply_markup=queue_keyboard(AddVideo.id_data))
+        
     except my_exceptions.NoFoundVideoException as ex:
         await state.clear()
         await message.answer(f'Такое видео было не найденно: {ex.public_id}.')
         await message.answer(create_queue_info(collector.get_public(AddVideo.id_data)), 
                                      reply_markup=queue_keyboard(AddVideo.id_data))
+        
     except my_exceptions.QueueLenException as ex:
         await state.clear()
         await message.answer(f'Слишком много видео, удалите одно если хотите добавить еще: {ex.public_id}.')

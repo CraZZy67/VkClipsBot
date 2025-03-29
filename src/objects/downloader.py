@@ -25,7 +25,10 @@ class VideoDownloader:
     settings = Settings()
     settings.HEADERS = Settings.HEADERS.copy()
     settings.HEADERS['referer'] = REFERER_LINK
+    
     SL = settings.SLESH
+    PREF_FL = settings.PREFIX_FILE
+    PREF_DIR = settings.PREFIX_DIR
     
     def refresh_creds(self):
         path = f'{self.settings.CREDS_PATH}{self.SL}{self.settings.ANONYM_FILE_NAME}.pkl'
@@ -65,9 +68,9 @@ class VideoDownloader:
         down_logger.debug(f'Заголовки ответа (video): {response.headers}')
         
         if not public_id in os.listdir(self.settings.VIDEO_PATH):
-            os.mkdir(f'{self.settings.VIDEO_PATH}{public_id}')
+            os.mkdir(f'{self.settings.VIDEO_PATH}{self.PREF_DIR}{public_id}')
         
-        path = f'{self.settings.VIDEO_PATH}{self.SL}{public_id}{self.SL}{video_id}.mp4'
+        path = f'{self.settings.VIDEO_PATH}{self.SL}{self.PREF_DIR}{public_id}{self.SL}{self.PREF_FL}{video_id}.mp4'
         with open(path, 'wb') as file:
             file.write(response.content)
         
