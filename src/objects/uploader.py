@@ -20,7 +20,6 @@ class VideoUploader:
     DOMAIN = 'https://vk.com/'
     TIMEOUT = 500.0
     
-    SL = settings.SLESH
     PREF_DIR = settings.PREFIX_DIR
     
     def upload(self, own_public: str, inter_public: str, video_id: str, headless: bool = True):
@@ -83,7 +82,7 @@ class VideoUploader:
         return driver
         
     def refresh_cookie(self, driver: Chrome):
-        path = f'{self.settings.CREDS_PATH}{self.SL}{self.settings.USERS_FILE_NAME}.pkl'
+        path = f'{self.settings.CREDS_PATH}{self.settings.USERS_FILE_NAME}.pkl'
         with open(path, 'rb') as file:
             self.creds = pickle.load(file)
         

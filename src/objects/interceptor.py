@@ -28,7 +28,6 @@ class Interceptor:
     
     DOWNLOADER = VideoDownloader()
     
-    SL = settings.SLESH
     PREF_FL = settings.PREFIX_FILE
     
     def __init__(self, inter_public: str):
@@ -97,7 +96,7 @@ class Interceptor:
         return response.json()
     
     def refresh_creds(self):    
-        path = f'{self.settings.CREDS_PATH}{self.SL}{self.settings.ANONYM_FILE_NAME}.pkl'
+        path = f'{self.settings.CREDS_PATH}{self.settings.ANONYM_FILE_NAME}.pkl'
         with open(path, 'rb') as file:
             self.creds = pickle.load(file)
             

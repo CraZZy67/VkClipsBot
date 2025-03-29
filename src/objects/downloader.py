@@ -31,7 +31,7 @@ class VideoDownloader:
     PREF_DIR = settings.PREFIX_DIR
     
     def refresh_creds(self):
-        path = f'{self.settings.CREDS_PATH}{self.SL}{self.settings.ANONYM_FILE_NAME}.pkl'
+        path = f'{self.settings.CREDS_PATH}{self.settings.ANONYM_FILE_NAME}.pkl'
         with open(path, 'rb') as file:
             self.creds = pickle.load(file)
         
@@ -70,7 +70,7 @@ class VideoDownloader:
         if not f'{self.PREF_DIR}{public_id}' in os.listdir(self.settings.VIDEO_PATH):
             os.mkdir(f'{self.settings.VIDEO_PATH}{self.PREF_DIR}{public_id}')
         
-        path = f'{self.settings.VIDEO_PATH}{self.SL}{self.PREF_DIR}{public_id}{self.SL}{self.PREF_FL}{video_id}.mp4'
+        path = f'{self.settings.VIDEO_PATH}{self.PREF_DIR}{public_id}{self.SL}{self.PREF_FL}{video_id}.mp4'
         with open(path, 'wb') as file:
             file.write(response.content)
         
