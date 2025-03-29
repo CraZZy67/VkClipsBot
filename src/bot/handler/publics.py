@@ -9,10 +9,7 @@ from src.bot.utils import create_str_public_list
 from src.bot.keyboards import publics_keyboard, menu_keyboard
 from src.settings import Settings
 from src.bot.fsm import AddPublic
-from src.objects.interceptor import Interceptor
-from src.objects.public import Public
-from src.objects.video_queue import VideoQueue
-from src.objects.authorizer import UserAuthorizer
+from src import objects
 from src.my_exceptions import PublicsLenException, NoValidIdException
 
 
@@ -81,13 +78,13 @@ async def catch_id_handler(message: Message, state: FSMContext):
         if message.text.isdigit():
             data = await state.get_data()
             
-            collector.add_public(Public(data['public_id'], Interceptor(data['inter_public_id']), 
-                                        VideoQueue(data['interval'])), message.text)
+            collector.add_public(objects.Public(data['public_id'], objects.Interceptor(data['inter_public_id']), 
+                                 objects.VideoQueue(data['interval'])), message.text)
                 
             state.clear()    
             collector.save_state()
 
-            UserAuthorizer().refresh_anonym_token()
+            objects.UserAuthorizer().refresh_anonym_token()
             
             await message.answer('Паблик успешно добавлен!')
             await message.answer(text='Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())

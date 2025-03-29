@@ -1,5 +1,4 @@
 import requests
-import dotenv
 
 import os
 import pickle

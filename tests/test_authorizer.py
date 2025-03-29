@@ -4,7 +4,7 @@ from selenium.webdriver import Chrome
 import os
 import unittest
 
-from src.objects.authorizer import UserAuthorizer
+from src import objects
 from src.my_exceptions import NoValidDataException
 
 class TestUserAuthorizer(unittest.TestCase):
@@ -13,7 +13,7 @@ class TestUserAuthorizer(unittest.TestCase):
     def test_main(self):
         dotenv.load_dotenv()
         
-        authorizer = UserAuthorizer()
+        authorizer = objects.UserAuthorizer()
         authorizer.send_verify_code(phone_number=os.getenv('NUMBER_FOR_TEST'))
         
         code = input('Код верификации: ')
@@ -24,7 +24,7 @@ class TestUserAuthorizer(unittest.TestCase):
     
     @unittest.skip('Не возможно автономно тестировать')    
     def test_error(self):
-        authorizer = UserAuthorizer()
+        authorizer = objects.UserAuthorizer()
         authorizer.send_verify_code(phone_number=os.getenv('NUMBER_FOR_TEST'))
         
         code = '24321'
@@ -32,7 +32,7 @@ class TestUserAuthorizer(unittest.TestCase):
         with self.assertRaises(NoValidDataException):
             authorizer.enter_verify_code(verify_code=code)
         
-        authorizer = UserAuthorizer(headless=False)
+        authorizer = objects.UserAuthorizer(headless=False)
         authorizer.send_verify_code(phone_number=os.getenv('NUMBER_FOR_TEST'))
         
         code = input('Код верификации: ')
@@ -42,5 +42,5 @@ class TestUserAuthorizer(unittest.TestCase):
             authorizer.enter_password(password=os.getenv('NO_VALID_PASSWORD_FOR_TEST'))
     
     def test_anonym(self):
-        authorizer = UserAuthorizer()
+        authorizer = objects.UserAuthorizer()
         authorizer.refresh_anonym_token()

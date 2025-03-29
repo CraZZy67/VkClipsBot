@@ -1,9 +1,7 @@
 import requests
-import dotenv
 
 import pickle
 from time import sleep
-import os
 
 from src.objects.downloader import VideoDownloader
 from src.settings import Settings

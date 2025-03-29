@@ -1,20 +1,19 @@
 import unittest
 import dotenv
 
-import asyncio
 import os
 
-from src.objects.video_queue import DebugVideoQueue, VideoQueue
+from src import objects
 from src.my_exceptions import QueueLenException
 
 
 class TestVideoQueue(unittest.TestCase):
     
-    # @unittest.skip('При автономном тестировании будет флудить в группу.')
+    @unittest.skip('При автономном тестировании будет флудить в группу.')
     def test_main(self):
         dotenv.load_dotenv()
         
-        ex = DebugVideoQueue(1)
+        ex = objects.DebugVideoQueue(1)
         
         ex.add_video(os.getenv('VIDEO_ID_FOR_TEST'))
         ex.add_video(os.getenv('VIDEO_ID_FOR_TEST'))
@@ -29,7 +28,7 @@ class TestVideoQueue(unittest.TestCase):
     def test_stop(self):
         dotenv.load_dotenv()
         
-        ex = DebugVideoQueue(1)
+        ex = objects.DebugVideoQueue(1)
         
         ex.add_video(os.getenv('VIDEO_ID_FOR_TEST'))
         
@@ -42,7 +41,7 @@ class TestVideoQueue(unittest.TestCase):
     def test_error(self):
         dotenv.load_dotenv()
         
-        ex = DebugVideoQueue(1)
+        ex = objects.DebugVideoQueue(1)
         
         with self.assertRaises(QueueLenException):
             ex.run_next_video(os.getenv('PUBLIC_ID_FOR_TEST'),
@@ -53,7 +52,7 @@ class TestVideoQueue(unittest.TestCase):
     def test_len(self):
         dotenv.load_dotenv()
         
-        ex = DebugVideoQueue(1)
+        ex = objects.DebugVideoQueue(1)
         
         [ex.add_video(os.getenv('VIDEO_ID_FOR_TEST')) for x in range(8)]
         
