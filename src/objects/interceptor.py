@@ -42,7 +42,8 @@ class Interceptor:
         
         try:
             video_count = self.get_json()['response']['count']
-        except KeyError:
+        except KeyError as ex:
+            inter_logger.error('Перехват ошибки: {ex}')
             raise AccessDeniedException
         
         if not video_count: raise NoValidInterPublicException
@@ -69,7 +70,8 @@ class Interceptor:
     def get_video_ids(self, count: str) -> list:
         try:
             response = self.get_json(count=count)['response']
-        except KeyError:
+        except KeyError as ex:
+            inter_logger.error('Перехват ошибки: {ex}')
             raise AccessDeniedException
         
         ids = list()

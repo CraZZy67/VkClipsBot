@@ -17,7 +17,6 @@ class Collector:
     def add_public(self, public: Public, id: str):
         if self.max_publics != len(self.publics):
             if id in self.publics: raise NoValidIdException
-            
             self.publics[id] = public
         else:
             raise PublicsLenException

@@ -24,6 +24,7 @@ class VideoUploader:
     
     def upload(self, own_public: str, inter_public: str, video_id: str, headless: bool = True):
         try: 
+            upload_logger.info('Выгрузка видео.')
             driver = self.get_driver(headless=headless)
             driver.get(self.DOMAIN + own_public)
             
@@ -35,6 +36,7 @@ class VideoUploader:
             try:
                 button = driver.find_element(By.CSS_SELECTOR, '[data-testid="posting_create_clip_button"]')
             except NoSuchElementException as ex:
+                upload_logger.error(f'Перехват ошибки: {ex}')
                 raise NoValidOwnPublicException
                 
             button.click()
@@ -43,7 +45,8 @@ class VideoUploader:
             file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{inter_public}{self.SL}{video_id}.mp4'
             try:
                 input.send_keys(file_path)
-            except InvalidArgumentException:
+            except InvalidArgumentException as ex:
+                upload_logger.error(f'Перехват ошибки: {ex}')
                 raise NoValidVideoPathException
             
             button = driver.find_element(By.CSS_SELECTOR, '[data-testid="clips-uploadForm-publish-button"]')

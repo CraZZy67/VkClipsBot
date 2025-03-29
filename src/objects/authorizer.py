@@ -57,7 +57,8 @@ class UserAuthorizer:
         
         try:
             self.driver.find_element(By.CLASS_NAME, 'vkc__Password__Wrapper')
-        except NoSuchElementException:
+        except NoSuchElementException as ex:
+            auth_logger.error(f'Перехват ошибки: {ex}')
             raise NoValidDataException
     
     def enter_password(self, password: str):
@@ -69,7 +70,8 @@ class UserAuthorizer:
         
         try:
             self.driver.find_element(By.CSS_SELECTOR, '[data-testid="posting_create_post_button"]')
-        except NoSuchElementException:
+        except NoSuchElementException as ex:
+            auth_logger.error(f'Перехват ошибки: {ex}')
             raise NoValidDataException
         
         sleep(2.0)
@@ -94,6 +96,8 @@ class UserAuthorizer:
     
     def refresh_anonym_token(self):
         try:
+            auth_logger.info('Обновление анонимного токена.')
+            
             driver = Chrome(options=self.options)
             driver.get(self.ANONYM_LINK)
             sleep(1.0)

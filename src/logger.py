@@ -29,6 +29,12 @@ add_hadlers(logger=upload_logger)
 
 bot_logger = logging.getLogger('bot')
 add_hadlers(logger=bot_logger)
+
+queue_logger = logging.getLogger('queue')
+add_hadlers(logger=queue_logger)
+
+pub_logger = logging.getLogger('ppub')
+add_hadlers(logger=pub_logger)
 # ---------
 
 # ---------    
@@ -36,7 +42,9 @@ auth_logger.setLevel(logging.INFO)
 inter_logger.setLevel(logging.INFO)
 down_logger.setLevel(logging.INFO)
 upload_logger.setLevel(logging.INFO)
-bot_logger.setLevel(logging.DEBUG)
+bot_logger.setLevel(logging.INFO)
+queue_logger.setLevel(logging.INFO)
+pub_logger.setLevel(logging.INFO)
 # ---------
 
 # logging.disable()

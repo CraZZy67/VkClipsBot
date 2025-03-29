@@ -7,6 +7,7 @@ from src.objects.uploader import VideoUploader
 from src.my_exceptions import QueueLenException
 from src.settings import Settings
 from src.objects.authorizer import UserAuthorizer
+from src.logger import queue_logger
 
 
 class VideoQueue:
@@ -28,9 +29,9 @@ class VideoQueue:
             if len(self.queue):
                 self.started_time = datetime.now()
                 
-                print('B')
+                queue_logger.info(f'Начало таймера. Задержка: {float(self.interval * 60)}')
                 await asyncio.sleep(float(self.interval * 60))
-                print('A')
+                queue_logger.info('Конец таймера.')
                 
                 UserAuthorizer().refresh_anonym_token()
             else:
@@ -61,7 +62,10 @@ class DebugVideoQueue(VideoQueue):
             if len(self.queue): 
                 self.started_time = datetime.now()
                 
+                queue_logger.info(f'Начало таймера. Задержка: {float(self.interval * 60)}')
                 time.sleep(float(self.interval * 60))
+                queue_logger.info('Конец таймера.')
+                
                 UserAuthorizer().refresh_anonym_token()
             else:
                 raise QueueLenException

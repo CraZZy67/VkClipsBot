@@ -36,7 +36,9 @@ class VideoDownloader:
         self.jar = requests.cookies.RequestsCookieJar()
         [self.jar.set(x['name'], x['value']) for x in self.creds['cookie']]
         
-    def download(self, video_id: str, public_id: str):       
+    def download(self, video_id: str, public_id: str):
+        down_logger.info('Загрузка видео.')
+               
         self.refresh_creds()
         string_info = f'{public_id}_{video_id}'
         
