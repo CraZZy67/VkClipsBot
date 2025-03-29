@@ -11,7 +11,6 @@ from src.objects.authorizer import UserAuthorizer
 from src.logger import bot_logger
 
 
-settings = Settings()
 auth_router = Router()
 authorizer = None
 
@@ -31,7 +30,7 @@ try:
     @auth_router.message(Auth.phone_number, F.text == "cancel")
     async def cancel_handler(message: Message, state: FSMContext):
         await state.clear()
-        await message.answer(Settings.START_TXT, reply_markup=menu_keyboard())
+        await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
 
     @auth_router.message(Auth.phone_number)
     async def catch_phone_number_handler(message: Message, state: FSMContext):
@@ -44,7 +43,7 @@ try:
                 
                 bot_logger.error('Ошибка функции отправки кода верификации: {ex}')
                 await message.answer('Произошла неожиданная ошибка, попробуйте перезапустить авторизацию.')
-                await message.answer(Settings.START_TXT, reply_markup=menu_keyboard())
+                await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
                 return None
                 
             await message.answer('К вам на телефон был отправлен код, введите его.')
@@ -58,7 +57,7 @@ try:
         await state.clear()
         authorizer.driver.quit()
         
-        await message.answer(Settings.START_TXT, reply_markup=menu_keyboard())
+        await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
 
     @auth_router.message(Auth.verify_code)
     async def catch_verify_code_handler(message: Message, state: FSMContext):
@@ -71,7 +70,7 @@ try:
                 
                 bot_logger.error('Ошибка функции ввода кода верификации: {ex}')
                 await message.answer('Произошла ошибка, попробуйте перезапустить авторизацию. Внимательней введите данные.')
-                await message.answer(Settings.START_TXT, reply_markup=menu_keyboard())
+                await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
                 return None
             
             await message.answer('Теперь введите пароль.')
@@ -90,12 +89,12 @@ try:
             
             bot_logger.error('Ошибка функции ввода пароля: {ex}')
             await message.answer('Произошла ошибка, попробуйте перезапустить авторизацию. Внимательней введите данные.')
-            await message.answer(Settings.START_TXT, reply_markup=menu_keyboard())
+            await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
             return None
             
         await state.clear()
         await message.answer('Поздравляю! Авторизация прошла успешно.')
-        await message.answer(Settings.START_TXT, reply_markup=menu_keyboard())
+        await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
         
 except Exception as ex:
     bot_logger.error('Произошла ошибка: {ex}')

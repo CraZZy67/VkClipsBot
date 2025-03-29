@@ -10,7 +10,6 @@ from src.logger import bot_logger
 
 
 delete_router = Router()
-settings = Settings()
 
 @delete_router.callback_query(F.data == 'delete_pub')
 async def delete_handler(callback: CallbackQuery, state: FSMContext):
@@ -26,7 +25,7 @@ async def delete_handler(callback: CallbackQuery, state: FSMContext):
 @delete_router.message(DeletePublic.id, F.text == 'cancel')
 async def cancel_del_handler(message: Message, state: FSMContext):
     await state.clear()
-    await message.answer(text=settings.START_TXT, reply_markup=menu_keyboard())
+    await message.answer(text='Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
 
 @delete_router.message(DeletePublic.id)
 async def catch_id_del_handler(message: Message, state: FSMContext):
@@ -35,7 +34,7 @@ async def catch_id_del_handler(message: Message, state: FSMContext):
             collector.delete_public(message.text)
             await message.answer('Паблик был успешно удален!')
             await state.clear()
-            await message.answer(text=settings.START_TXT, reply_markup=menu_keyboard())
+            await message.answer(text='Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
         else:
             await message.answer('Вы не правильно ввели id, попробуйте еще раз.')
             
@@ -46,4 +45,4 @@ async def catch_id_del_handler(message: Message, state: FSMContext):
         bot_logger.error(f'Произошла ошибка: {ex}')
         state.clear()
         await message.answer('Произошла неожиданная ошибка, попробуйте позже.')
-        await message.answer(text=settings.START_TXT, reply_markup=menu_keyboard())
+        await message.answer(text='Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())

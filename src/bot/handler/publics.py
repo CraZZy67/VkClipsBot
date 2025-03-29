@@ -33,7 +33,8 @@ async def publics_handler(callback: CallbackQuery):
         
 @publics_router.callback_query(F.data == 'back')
 async def back_handler(callback: CallbackQuery):
-    await callback.message.edit_text(text=settings.START_TXT, reply_markup=menu_keyboard())
+    await callback.message.edit_text(text='Приветствую. Выбери свои первые действия.', 
+                                     reply_markup=menu_keyboard())
 
 @publics_router.callback_query(F.data == 'add_pub')
 async def add_handler(callback: CallbackQuery, state: FSMContext):
@@ -45,7 +46,7 @@ async def add_handler(callback: CallbackQuery, state: FSMContext):
 @publics_router.message(AddPublic.public_id, F.text == 'cancel')
 async def cancel_pub_handler(message: Message, state: FSMContext):
     await state.clear()
-    await message.answer(text=settings.START_TXT, reply_markup=menu_keyboard())
+    await message.answer(text='Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
 
 @publics_router.message(AddPublic.public_id)
 async def catch_public_id_handler(message: Message, state: FSMContext):
@@ -89,7 +90,7 @@ async def catch_id_handler(message: Message, state: FSMContext):
             UserAuthorizer().refresh_anonym_token()
             
             await message.answer('Паблик успешно добавлен!')
-            await message.answer(text=settings.START_TXT, reply_markup=menu_keyboard())
+            await message.answer(text='Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
         else:
             await message.answer('Вы не правильно ввели id, попробуйте еще раз.')
             
@@ -99,9 +100,9 @@ async def catch_id_handler(message: Message, state: FSMContext):
     except PublicsLenException:
         await state.clear()
         await message.answer('Достигнуто максимальное количество пабликов.')
-        await message.answer(text=settings.START_TXT, reply_markup=menu_keyboard())
+        await message.answer(text='Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
         
     except Exception:
         await state.clear()
         await message.answer('Произошла неожиданная ошибка, попробуйте позже.')
-        await message.answer(text=settings.START_TXT, reply_markup=menu_keyboard())
+        await message.answer(text='Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())

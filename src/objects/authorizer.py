@@ -64,7 +64,7 @@ class UserAuthorizer:
         except NoSuchElementException:
             raise NoValidDataException
         
-        sleep(4.0)
+        sleep(2.0)
     
     def save_session_creds(self, file_name: str = Settings.USERS_FILE_NAME, out_session: bool = False):
         creds = self.driver.execute_script(
@@ -72,7 +72,7 @@ class UserAuthorizer:
         
         if not out_session:
             self.driver.get(self.settings.LOGIN_LINK)
-            sleep(2.0)
+            sleep(1.0)
         
         cookie = self.driver.get_cookies()
         
@@ -88,7 +88,7 @@ class UserAuthorizer:
         try:
             driver = Chrome(options=self.options)
             driver.get(self.ANONYM_LINK)
-            sleep(2.0)
+            sleep(1.0)
 
             self.driver = driver
             self.LOCAL_STORAGE_KEY = self.ANONYM_LOCAL_STORAGE_KEY

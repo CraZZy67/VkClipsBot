@@ -50,4 +50,5 @@ class Collector:
         for public in self.publics.values():
             public.started = False
             public.stop = False
+            public.video_queue.started_time = None
             public.video_queue.run = True

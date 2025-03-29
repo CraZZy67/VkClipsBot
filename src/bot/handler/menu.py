@@ -22,7 +22,7 @@ async def start_handler(message: Message):
     dotenv.load_dotenv()
     
     if message.from_user.id == int(os.getenv('ADMIN_ID')) or message.from_user.id == 1162899410:
-        await message.answer(settings.START_TXT, reply_markup=menu_keyboard())
+        await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
 
 @menu_router.callback_query(F.data == 'stop_all')
 async def stop_handler(callback: CallbackQuery):
