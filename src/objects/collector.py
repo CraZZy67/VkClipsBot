@@ -35,7 +35,7 @@ class Collector:
         for public in self.publics.values():
             try:
                 create_task(public.start())
-            except my_exceptions.exceptions.OverOneStartedException:
+            except my_exceptions.OverOneStartedException:
                 continue
     
     def save_state(self):

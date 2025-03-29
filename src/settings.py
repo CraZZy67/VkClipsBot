@@ -32,4 +32,5 @@ class Settings:
     }
     
     MAX_LEN_QUEUE = 5
+    MAX_NUMBER_PUBLICS = 5
     

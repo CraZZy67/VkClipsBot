@@ -30,10 +30,15 @@ async def cancel_del_handler(message: Message, state: FSMContext):
 async def catch_id_del_handler(message: Message, state: FSMContext):
     try:
         if message.text.isdigit():
-            collector.delete_public(message.text)
-            await message.answer('Паблик был успешно удален!')
-            await state.clear()
-            await message.answer(text='Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
+            if not collector.get_public(message.text).started:
+                collector.delete_public(message.text)
+                
+                await message.answer('Паблик был успешно удален!')
+                await state.clear()
+                await message.answer(text='Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
+            else:
+                await message.answer('Этот паблик находится в работе. Удалите его когда он будет остановлен.')
+                await message.answer(text='Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
         else:
             await message.answer('Вы не правильно ввели id, попробуйте еще раз.')
             

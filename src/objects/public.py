@@ -75,6 +75,10 @@ class Public:
                         if video:
                             os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.inter_public}{self.SL}{video}.mp4')
                     else:
+                        pub_logger.info(f'Паблик {self.public_id} остановлен.')
+                        
+                        self.video_queue.add_video(str(self.interceptor.intercept_video()))
+                        
                         self.started = False
                         self.stop = False
                         break

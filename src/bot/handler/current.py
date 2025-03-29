@@ -52,13 +52,16 @@ async def start_stop_handler(callback: CallbackQuery, callback_data: PublicsFact
 
 @current_router.callback_query(PublicsFactory.filter(F.info == 'change_inter_public'))
 async def change_inter_handler(callback: CallbackQuery, callback_data: PublicsFactory, state: FSMContext):
-    await state.set_state(ChangeInter.id)
-    ChangeInter.id_data = callback_data.id
-    
-    await callback.message.answer('Введите id того паблика на который выхотите сменить старый id.')
-    await callback.message.answer('Если хотите выйти, введите "cancel".')
-    await callback.answer()
+    if not collector.get_public(callback_data.id).started:
+        await state.set_state(ChangeInter.id)
+        ChangeInter.id_data = callback_data.id
 
+        await callback.message.answer('Введите id того паблика на который выхотите сменить старый id.')
+        await callback.message.answer('Если хотите выйти, введите "cancel".')
+        await callback.answer()
+    else:
+        await callback.answer('Этот паблик находиться в работе.')
+        
 @current_router.message(ChangeInter.id, F.text == 'cancel')
 async def cancel_pub_handler(message: Message, state: FSMContext):
     await state.clear()
