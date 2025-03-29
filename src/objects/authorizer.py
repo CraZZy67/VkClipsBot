@@ -98,11 +98,9 @@ class UserAuthorizer:
         try:
             auth_logger.info('Обновление анонимного токена.')
             
-            driver = Chrome(options=self.options)
-            driver.get(self.ANONYM_LINK)
+            self.driver.get(self.ANONYM_LINK)
             sleep(1.0)
 
-            self.driver = driver
             self.LOCAL_STORAGE_KEY = self.ANONYM_LOCAL_STORAGE_KEY
 
             self.save_session_creds(file_name=self.settings.ANONYM_FILE_NAME, out_session=True)
