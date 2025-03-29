@@ -21,7 +21,6 @@ class VideoUploader:
     TIMEOUT = 500.0
     
     SL = settings.SLESH
-    PREF_FL = settings.PREFIX_FILE
     PREF_DIR = settings.PREFIX_DIR
     
     def upload(self, own_public: str, inter_public: str, video_id: str, headless: bool = True):
@@ -44,7 +43,7 @@ class VideoUploader:
             button.click()
             
             input = driver.find_element(By.CSS_SELECTOR, '[data-testid="video_upload_select_file"]')
-            file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{self.PREF_DIR}{inter_public}{self.SL}{self.PREF_FL}{video_id}.mp4'
+            file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{self.PREF_DIR}{inter_public}{self.SL}{video_id}.mp4'
             try:
                 input.send_keys(file_path)
             except InvalidArgumentException as ex:

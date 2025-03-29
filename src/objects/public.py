@@ -17,7 +17,6 @@ class Public:
     ANONYM_LINK = 'https://vk.com/icollbelgu'
     LOCAL_STORAGE_KEY = '6287487:get_anonym_token:login:auth'
     
-    PREF_FL = settings.PREFIX_FILE
     PREF_DIR = settings.PREFIX_DIR
     
     def __init__(self, public_id: str, interceptor: Interceptor, video_queue: VideoQueue):
@@ -64,19 +63,19 @@ class Public:
                 video = await self.video_queue.run_next_video(self.inter_public, 
                                                                 self.public_id)
                 if video:
-                    os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{self.PREF_FL}{video}.mp4')
+                    os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{video}.mp4')
                 
                 while True:
                     if not self.stop:
                         pub_logger.info(f'Работа цикла у паблика {self.public_id}')
                         
-                        self.video_queue.add_video(str(self.interceptor.intercept_video()))
+                        self.video_queue.add_video(self.interceptor.intercept_video())
                         
                         video = await self.video_queue.run_next_video(self.inter_public, 
                                                                         self.public_id)
                         
                         if video:
-                            os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{self.PREF_FL}{video}.mp4')
+                            os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{video}.mp4')
                     else:
                         pub_logger.info(f'Паблик {self.public_id} остановлен.')
                         
@@ -119,7 +118,7 @@ class Public:
     def delete_video(self):
         if len(self.video_queue.queue) > 2:
             video = self.video_queue.delete_video()
-            os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{self.PREF_FL}{video}.mp4')
+            os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{video}.mp4')
         else:
             raise QueueLenException
         
@@ -145,18 +144,18 @@ class DebugPublic(Public):
                 video = self.video_queue.run_next_video(self.inter_public, 
                                                         self.public_id)
                 if video:   
-                    os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{self.PREF_FL}{video}.mp4')
+                    os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{video}.mp4')
                     
                 while True:
                     if not self.stop:
                         pub_logger.info(f'Работа цикла у паблика {self.public_id}')
                         
-                        self.video_queue.add_video(str(self.interceptor.intercept_video()))
+                        self.video_queue.add_video(self.interceptor.intercept_video())
                         
                         video = self.video_queue.run_next_video(self.inter_public, 
                                                                 self.public_id)
                         if video:
-                            os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{self.PREF_FL}{video}.mp4')
+                            os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{video}.mp4')
                     else:
                         self.started = False
                         self.stop = False

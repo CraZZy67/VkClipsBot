@@ -27,7 +27,9 @@ class Interceptor:
     settings.HEADERS.pop('x-requested-with')
     
     DOWNLOADER = VideoDownloader()
+    
     SL = settings.SLESH
+    PREF_FL = settings.PREFIX_FILE
     
     def __init__(self, inter_public: str):
         self.inter_public = inter_public
@@ -35,7 +37,7 @@ class Interceptor:
 
         self.cycles = int()
             
-    def intercept_video(self) -> int:
+    def intercept_video(self) -> str:
         count = 10
         
         try:
@@ -56,7 +58,7 @@ class Interceptor:
                     
                     self.DOWNLOADER.download(public_id=self.inter_public, video_id=i)
                     self.inted_video.append(i)
-                    return i
+                    return f'{self.PREF_FL}{i}'
             
             count += 10
             
