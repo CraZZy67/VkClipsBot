@@ -1,9 +1,11 @@
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+import dotenv
 
 import pickle
 from time import sleep
+import os
 
 from src.settings import Settings
 from src.logger import auth_logger
@@ -20,9 +22,15 @@ class UserAuthorizer:
     settings = Settings()
     
     def __init__(self, headless: bool = True):
+        dotenv.load_dotenv()
+        
         self.options = ChromeOptions()
         
-        if headless:
+        if os.getenv('PLATFORM') == 'Linux':
+            self.options.add_argument('--headless')
+            self.options.add_argument("--no-sandbox")
+            self.options.add_argument("--disable-dev-shm-usage")
+        elif headless:
             self.options.add_argument('--headless')
             
         self.driver = Chrome(options=self.options)
@@ -93,6 +101,6 @@ class UserAuthorizer:
             self.driver = driver
             self.LOCAL_STORAGE_KEY = self.ANONYM_LOCAL_STORAGE_KEY
 
-            self.save_session_creds(file_name='anonym_creds', out_session=True)
+            self.save_session_creds(file_name=self.settings.ANONYM_FILE_NAME, out_session=True)
         finally:
             self.driver.quit()

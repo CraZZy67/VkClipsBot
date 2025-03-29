@@ -5,7 +5,6 @@ from aiogram.fsm.context import FSMContext
 import re
 
 from src.bot.fsm import Auth
-from src.settings import Settings
 from src.bot.keyboards import menu_keyboard
 from src.objects.authorizer import UserAuthorizer
 from src.logger import bot_logger

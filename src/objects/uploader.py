@@ -20,12 +20,10 @@ class VideoUploader:
     DOMAIN = 'https://vk.com/'
     TIMEOUT = 500.0
     
+    SL = settings.SLESH
+    
     def upload(self, own_public: str, inter_public: str, video_id: str, headless: bool = True):
-        try:
-            dotenv.load_dotenv()
-
-            sl = os.getenv('SLESH')
-            
+        try: 
             driver = self.get_driver(headless=headless)
             driver.get(self.DOMAIN + own_public)
             
@@ -42,7 +40,7 @@ class VideoUploader:
             button.click()
             
             input = driver.find_element(By.CSS_SELECTOR, '[data-testid="video_upload_select_file"]')
-            file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{inter_public}{sl}{video_id}.mp4'
+            file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{inter_public}{self.SL}{video_id}.mp4'
             try:
                 input.send_keys(file_path)
             except InvalidArgumentException:
@@ -63,22 +61,25 @@ class VideoUploader:
             driver.quit()
          
     def get_driver(self, headless: bool) -> Chrome:
-        options = ChromeOptions()
+        dotenv.load_dotenv()
+        self.options = ChromeOptions()
         
-        if headless:
-            options.add_argument('--headless')
+        if os.getenv('PLATFORM') == 'Linux':
+            self.options.add_argument('--headless')
+            self.options.add_argument("--no-sandbox")
+            self.options.add_argument("--disable-dev-shm-usage")
+        elif headless:
+            self.options.add_argument('--headless')
+        
             
-        driver = Chrome(options=options)
+        driver = Chrome(options=self.options)
         driver.implicitly_wait(15.0)
         driver.set_window_size(1200, 850)
         
         return driver
         
     def refresh_cookie(self, driver: Chrome):
-        dotenv.load_dotenv()
-
-        sl = os.getenv('SLESH')
-        path = f'{self.settings.CREDS_PATH}{sl}{self.settings.USERS_FILE_NAME}.pkl'
+        path = f'{self.settings.CREDS_PATH}{self.SL}{self.settings.USERS_FILE_NAME}.pkl'
         with open(path, 'rb') as file:
             self.creds = pickle.load(file)
         

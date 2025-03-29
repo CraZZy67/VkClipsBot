@@ -29,6 +29,7 @@ class Interceptor:
     settings.HEADERS.pop('x-requested-with')
     
     DOWNLOADER = VideoDownloader()
+    SL = settings.SLESH
     
     def __init__(self, inter_public: str):
         self.inter_public = inter_public
@@ -93,12 +94,8 @@ class Interceptor:
         
         return response.json()
     
-    def refresh_creds(self):
-        dotenv.load_dotenv()
-
-        sl = os.getenv('SLESH')
-        
-        path = f'{self.settings.CREDS_PATH}{sl}{self.settings.ANONYM_FILE_NAME}.pkl'
+    def refresh_creds(self):    
+        path = f'{self.settings.CREDS_PATH}{self.SL}{self.settings.ANONYM_FILE_NAME}.pkl'
         with open(path, 'rb') as file:
             self.creds = pickle.load(file)
             

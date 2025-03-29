@@ -3,7 +3,6 @@ from aiogram.types import CallbackQuery, Message
 from aiogram.fsm.context import FSMContext
 
 from src.bot.fsm import DeletePublic
-from src.settings import Settings
 from src.bot.keyboards import menu_keyboard
 from src.bot.global_classes import collector
 from src.logger import bot_logger

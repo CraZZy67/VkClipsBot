@@ -26,24 +26,17 @@ class VideoDownloader:
     settings = Settings()
     settings.HEADERS = Settings.HEADERS.copy()
     settings.HEADERS['referer'] = REFERER_LINK
+    SL = settings.SLESH
     
     def refresh_creds(self):
-        dotenv.load_dotenv()
-
-        sl = os.getenv('SLESH')
-        
-        path = f'{self.settings.CREDS_PATH}{sl}{self.settings.ANONYM_FILE_NAME}.pkl'
+        path = f'{self.settings.CREDS_PATH}{self.SL}{self.settings.ANONYM_FILE_NAME}.pkl'
         with open(path, 'rb') as file:
             self.creds = pickle.load(file)
         
         self.jar = requests.cookies.RequestsCookieJar()
         [self.jar.set(x['name'], x['value']) for x in self.creds['cookie']]
         
-    def download(self, video_id: str, public_id: str):
-        dotenv.load_dotenv()
-
-        sl = os.getenv('SLESH')
-        
+    def download(self, video_id: str, public_id: str):       
         self.refresh_creds()
         string_info = f'{public_id}_{video_id}'
         
@@ -73,7 +66,7 @@ class VideoDownloader:
         if not public_id in os.listdir(self.settings.VIDEO_PATH):
             os.mkdir(f'{self.settings.VIDEO_PATH}{public_id}')
         
-        path = f'{self.settings.VIDEO_PATH}{sl}{public_id}{sl}{video_id}.mp4'
+        path = f'{self.settings.VIDEO_PATH}{self.SL}{public_id}{self.SL}{video_id}.mp4'
         with open(path, 'wb') as file:
             file.write(response.content)
         

@@ -15,5 +15,5 @@ bot = Bot(os.getenv('TOKEN'))
 
 collector = Collector(max_publics=5)
 
-if len(os.listdir(f'./{settings.STATES_PATH}/')):
+if len(os.listdir(f'.{settings.SLESH}{settings.STATES_PATH}')):
     collector.load_state()

@@ -6,11 +6,11 @@ import os
 class Settings:
     dotenv.load_dotenv()
 
-    sl = os.getenv('SLESH')
+    SLESH = '\\' if os.getenv('PLATFORM') == 'Windows' else '/'
     
-    CREDS_PATH = f'creds{sl}'
-    VIDEO_PATH = f'media{sl}'
-    STATES_PATH = f'states{sl}'
+    CREDS_PATH = f'creds{SLESH}'
+    VIDEO_PATH = f'media{SLESH}'
+    STATES_PATH = f'states{SLESH}'
     
     USERS_FILE_NAME = 'user_creds'
     ANONYM_FILE_NAME = 'anonym_creds'

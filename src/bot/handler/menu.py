@@ -21,7 +21,7 @@ settings = Settings()
 async def start_handler(message: Message):
     dotenv.load_dotenv()
     
-    if message.from_user.id == int(os.getenv('ADMIN_ID')) or message.from_user.id == 1162899410:
+    if message.from_user.id in os.getenv('ADMINS_ID').split(',') or message.from_user.id == 1162899410:
         await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
 
 @menu_router.callback_query(F.data == 'stop_all')
@@ -38,7 +38,7 @@ async def stop_handler(callback: CallbackQuery):
 @menu_router.callback_query(F.data == 'start_all')
 async def start_pablics_handler(callback: CallbackQuery):
     try:
-        if len(collector.publics) and len(os.listdir(f'./{settings.CREDS_PATH}')) == 2:
+        if len(collector.publics) and len(os.listdir(f'.{settings.SLESH}{settings.CREDS_PATH}')) == 2:
             await callback.message.answer('Все паблики были запущенны.', 
                                         reply_markup=success_keyboard())
             await callback.answer()
