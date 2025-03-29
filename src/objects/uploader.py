@@ -20,6 +20,7 @@ class VideoUploader:
     DOMAIN = 'https://vk.com/'
     TIMEOUT = 500.0
     
+    SL = settings.SLESH
     PREF_DIR = settings.PREFIX_DIR
     
     def upload(self, own_public: str, inter_public: str, video_id: str, headless: bool = True):

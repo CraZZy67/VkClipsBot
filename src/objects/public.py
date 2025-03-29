@@ -32,7 +32,7 @@ class Public:
         try:
             list_dir = os.listdir(f'.{self.SL}{self.settings.VIDEO_PATH[0:-1]}')
             
-            if not self.inter_public in list_dir:
+            if not f'{self.PREF_DIR}{self.inter_public}' in list_dir:
                 self.interceptor.intercept_video()
                 
             list_media = os.listdir(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}')
@@ -46,6 +46,8 @@ class Public:
                 
                 if not i in self.video_queue.queue:       
                     self.video_queue.add_video(i)
+                if not int(i[3:]) in self.interceptor.inted_video:
+                    self.interceptor.inted_video.append(int(i[3:]))
                              
         except AccessDeniedException:
                     raise AccessDeniedException(public_id=self.public_id)
