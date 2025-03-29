@@ -8,8 +8,7 @@ from src.bot.global_classes import collector
 from src.bot.keyboards import queue_keyboard, current_keyboard
 from src.bot.utils import create_queue_info, create_public_info
 from src.logger import bot_logger
-from src.my_exceptions import (AccessDeniedException, NoFoundVideoException,
-                               QueueLenException)
+import src.my_exceptions as my_exceptions
 
 
 queue_router = Router()
@@ -43,17 +42,17 @@ async def catch_video_id_handler(message: Message, state: FSMContext):
         else:
             await message.answer('Вы не правильно ввели id video')
             
-    except AccessDeniedException as ex:
+    except my_exceptions.AccessDeniedException as ex:
         await state.clear()
         await message.answer(f'Произошла ошибка доступа у паблика: {ex.public_id}.')
         await message.answer(create_queue_info(collector.get_public(AddVideo.id_data)), 
                                      reply_markup=queue_keyboard(AddVideo.id_data))
-    except NoFoundVideoException as ex:
+    except my_exceptions.NoFoundVideoException as ex:
         await state.clear()
         await message.answer(f'Такое видео было не найденно: {ex.public_id}.')
         await message.answer(create_queue_info(collector.get_public(AddVideo.id_data)), 
                                      reply_markup=queue_keyboard(AddVideo.id_data))
-    except QueueLenException as ex:
+    except my_exceptions.QueueLenException as ex:
         await state.clear()
         await message.answer(f'Слишком много видео, удалите одно если хотите добавить еще: {ex.public_id}.')
         await message.answer(create_queue_info(collector.get_public(AddVideo.id_data)), 
@@ -96,7 +95,7 @@ async def add_video_handler(callback: CallbackQuery, callback_data: PublicsFacto
     try:
         collector.get_public(callback_data.id).delete_video()
         await callback.answer('Видео было успешно удаленно')
-    except QueueLenException:
+    except my_exceptions.QueueLenException:
         await callback.answer('Осталось слишком мало видео')
 
 @queue_router.callback_query(PublicsFactory.filter(F.info == 'stop_video'))

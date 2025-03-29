@@ -1,8 +1,8 @@
 from asyncio import create_task
 import pickle
 
+import src.my_exceptions as my_exceptions
 from src.objects.public import Public
-from src.my_exceptions import PublicsLenException, NoValidIdException, OverOneStartedException
 from src.settings import Settings
 
 
@@ -16,10 +16,10 @@ class Collector:
     
     def add_public(self, public: Public, id: str):
         if self.max_publics != len(self.publics):
-            if id in self.publics: raise NoValidIdException
+            if id in self.publics: raise my_exceptions.NoValidIdException
             self.publics[id] = public
         else:
-            raise PublicsLenException
+            raise my_exceptions.PublicsLenException
     
     def stop_publics(self):
         for public in self.publics.values():
@@ -35,7 +35,7 @@ class Collector:
         for public in self.publics.values():
             try:
                 create_task(public.start())
-            except OverOneStartedException:
+            except my_exceptions.exceptions.OverOneStartedException:
                 continue
     
     def save_state(self):

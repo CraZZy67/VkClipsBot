@@ -10,8 +10,7 @@ from src.bot.keyboards import current_keyboard, queue_keyboard
 from src.bot.global_classes import collector
 from src.logger import bot_logger
 from src.bot.fsm import ChangeInter
-from src.my_exceptions import (AccessDeniedException, NoValidInterPublicException,
-                               NoValidOwnPublicException, NoValidVideoPathException)
+import src.my_exceptions as my_exceptions
 
 
 current_router = Router()
@@ -34,16 +33,16 @@ async def start_stop_handler(callback: CallbackQuery, callback_data: PublicsFact
             collector.get_public(callback_data.id).stop = True
             await callback.answer('Паблик остановлен')
             
-    except AccessDeniedException as ex:
+    except my_exceptions.AccessDeniedException as ex:
         await callback.message.answer(f'Произошла ошибка доступа у паблика: {ex.public_id}.')
         
-    except NoValidInterPublicException as ex:
+    except my_exceptions.NoValidInterPublicException as ex:
         await callback.message.answer(f'У паблика {ex.public_id} был не правильно введен паблик для отслеживания.')
         
-    except NoValidOwnPublicException as ex:
+    except my_exceptions.NoValidOwnPublicException as ex:
         await callback.message.answer(f'У паблика {ex.public_id} был не правильно введен его ID.')
         
-    except NoValidVideoPathException as ex:
+    except my_exceptions.NoValidVideoPathException as ex:
         await callback.message.answer(f'Ошибка пути у паблика {ex.public_id}. Попробуйте перепроверить его данные.')
         
     except Exception as ex:
