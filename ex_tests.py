@@ -29,11 +29,3 @@ suit = unittest.TestSuite()
 
 # runner = unittest.TextTestRunner()
 # runner.run(suit)
-
-async def test_async():
-        ex = VideoQueue(1)
-        ex2 = Interceptor('-203677279')
-        pub = Public('club226910620', ex2, ex)
-        await pub.start()
-
-asyncio.run(test_async())
