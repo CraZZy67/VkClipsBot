@@ -81,7 +81,7 @@ async def catch_id_handler(message: Message, state: FSMContext):
             collector.add_public(objects.Public(data['public_id'], objects.Interceptor(data['inter_public_id']), 
                                  objects.VideoQueue(data['interval'])), message.text)
                 
-            state.clear()    
+            await state.clear()    
             collector.save_state()
 
             objects.UserAuthorizer().refresh_anonym_token()
