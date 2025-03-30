@@ -33,7 +33,7 @@ try:
 
     @auth_router.message(Auth.phone_number)
     async def catch_phone_number_handler(message: Message, state: FSMContext):
-        if bool(re.match(r'^\+\d{15}$', message.text)):
+        if bool(re.match(r'^\+\d+$', message.text)):
             try:
                 authorizer.send_verify_code(message.text)
             except Exception as ex:
