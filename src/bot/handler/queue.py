@@ -109,5 +109,4 @@ async def add_video_handler(callback: CallbackQuery, callback_data: PublicsFacto
 async def add_video_handler(callback: CallbackQuery, callback_data: PublicsFactory):
      await callback.message.edit_text(text=create_public_info(collector.get_public(callback_data.id)),
                                       reply_markup=current_keyboard(callback_data.id))
-    
-    
+      
