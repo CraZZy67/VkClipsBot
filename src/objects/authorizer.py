@@ -43,8 +43,9 @@ class UserAuthorizer:
         button.click()
         
         div = self.driver.find_element(By.CLASS_NAME, 'vkuiFormField__content')
-        div.find_element(By.TAG_NAME, 'input').clear()
-        div.send_keys(phone_number)
+        input = div.find_element(By.TAG_NAME, 'input')
+        input.clear()
+        input.send_keys(phone_number)
         
         button = self.driver.find_element(By.CSS_SELECTOR, '[data-test-id="submit_btn"]')
         button.click()

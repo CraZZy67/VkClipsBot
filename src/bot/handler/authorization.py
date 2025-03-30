@@ -40,7 +40,7 @@ try:
                 await state.clear()
                 authorizer.driver.quit()
                 
-                bot_logger.error('Ошибка функции отправки кода верификации: {ex}')
+                bot_logger.error(f'Ошибка функции отправки кода верификации: {ex}')
                 await message.answer('Произошла неожиданная ошибка, попробуйте перезапустить авторизацию.')
                 await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
                 return None
@@ -67,7 +67,7 @@ try:
                 await state.clear()
                 authorizer.driver.quit()
                 
-                bot_logger.error('Ошибка функции ввода кода верификации: {ex}')
+                bot_logger.error(f'Ошибка функции ввода кода верификации: {ex}')
                 await message.answer('Произошла ошибка, попробуйте перезапустить авторизацию. Внимательней введите данные.')
                 await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
                 return None
@@ -86,7 +86,7 @@ try:
             await state.clear()
             authorizer.driver.quit()
             
-            bot_logger.error('Ошибка функции ввода пароля: {ex}')
+            bot_logger.error(f'Ошибка функции ввода пароля: {ex}')
             await message.answer('Произошла ошибка, попробуйте перезапустить авторизацию. Внимательней введите данные.')
             await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
             return None
@@ -96,5 +96,5 @@ try:
         await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
         
 except Exception as ex:
-    bot_logger.error('Произошла ошибка: {ex}')
+    bot_logger.error(f'Произошла ошибка: {ex}')
     authorizer.driver.quit()
