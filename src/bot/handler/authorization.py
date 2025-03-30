@@ -22,7 +22,7 @@ try:
         
         authorizer = UserAuthorizer()
         
-        await callback.message.answer('Введите номер своего телефона без кода страны.')
+        await callback.message.answer('Введите номер своего телефона c кодом вашей страны. Пример: +79952263655')
         await callback.message.answer('Если вы случайно сюда попали то напишите "cancel", позже у вас не получится выйти!')
         await callback.answer()
 
@@ -33,7 +33,7 @@ try:
 
     @auth_router.message(Auth.phone_number)
     async def catch_phone_number_handler(message: Message, state: FSMContext):
-        if bool(re.match(r'^\d{10}$', message.text)):
+        if bool(re.match(r'^\+\d{15}$', message.text)):
             try:
                 authorizer.send_verify_code(message.text)
             except Exception as ex:
