@@ -50,7 +50,7 @@ def create_public_info(public: Public) -> str:
     else:
         time_left = get_time_left(public.video_queue.started_time,
                               public.video_queue.interval)
-        string += f'Оствашееся время: {time_left}'
+        string += f'Оствашееся время: {time_left}\n'
     
     string += sep + '\n'
     string += f'Статус: {status}'
