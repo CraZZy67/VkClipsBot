@@ -86,6 +86,8 @@ class VideoUploader:
         path = f'{self.settings.CREDS_PATH}{self.settings.USERS_FILE_NAME}.pkl'
         with open(path, 'rb') as file:
             self.creds = pickle.load(file)
+            
+        driver.delete_all_cookies()
         
         self.add_certain_cookie(excepted_domain='.login.vk.com', driver=driver)
                 
