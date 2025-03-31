@@ -6,7 +6,7 @@ from src.objects.public import Public
 
 def create_str_public_list() -> str:
     string = 'ID | PUBLIC ID | STATUS | TIME LEFT (h:m:s)\n\n'
-    sep = '———————————————'
+    sep = '—————————————'
     
     for k, v in collector.publics.items():
         if v.stop:
@@ -30,7 +30,7 @@ def get_time_left(started_time: datetime, interval: str) -> str:
     return time_left[:time_left.find('.')]
 
 def create_public_info(public: Public) -> str:
-    sep = '—————————————————————'
+    sep = '—————————————'
     string = 'ИНФОРМАЦИЯ О ПАБЛИКЕ\n\n'
     
     if public.stop:
@@ -42,11 +42,11 @@ def create_public_info(public: Public) -> str:
     
     string += f'Паблик id: {public.public_id}\n'
     string += sep + '\n'
-    string += f'Отслеживаемый паблик: {public.inter_public}'
+    string += f'Отслеживаемый паблик: {public.inter_public}\n'
     string += sep + '\n'
     
     if status == 'stoped':
-        string += 'Оствашееся время: N\\A'
+        string += 'Оствашееся время: N\\A\n'
     else:
         time_left = get_time_left(public.video_queue.started_time,
                               public.video_queue.interval)
@@ -58,7 +58,7 @@ def create_public_info(public: Public) -> str:
     return string
 
 def create_queue_info(public: Public) -> str:
-    sep = '—————————————————————'
+    sep = '—————————————'
     string = 'ИНФОРМАЦИЯ О ВИДЕО ОЧЕРЕДИ\n\n'
     
     string += f'Интервал: {public.video_queue.interval} мин\n'

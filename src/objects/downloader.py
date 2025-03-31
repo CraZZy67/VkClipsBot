@@ -20,7 +20,8 @@ class VideoDownloader:
     URL = 'https://vk.com/al_video.php?act=show'
     REFERER_LINK = 'https://vk.com/improcom?from=groups'
     
-    KEYS_LIST = ['payload', 1, 4, 'player', 'params', 0, 'url1080']
+    KEYS_LIST = ['payload', 1, 4, 'player', 'params', 0]
+    QUALITY_KEYS = ['url1080', 'url720']
     
     settings = Settings()
     settings.HEADERS = Settings.HEADERS.copy()
@@ -62,6 +63,10 @@ class VideoDownloader:
             raise NoFoundVideoException
         
         for i in self.KEYS_LIST: response = response[i]
+        
+        for i in self.QUALITY_KEYS:
+            if i in response:
+                response = response[i]
 
         response = requests.get(response, headers=self.settings.HEADERS)
         
