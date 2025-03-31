@@ -20,7 +20,7 @@ settings = Settings()
 async def start_handler(message: Message):
     dotenv.load_dotenv()
     
-    if message.from_user.id in os.getenv('ADMINS_ID').split(',') or message.from_user.id == 1162899410:
+    if str(message.from_user.id) in os.getenv('ADMINS_ID').split(',') or message.from_user.id == 1162899410:
         await message.answer('Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
 
 @menu_router.callback_query(F.data == 'stop_all')
