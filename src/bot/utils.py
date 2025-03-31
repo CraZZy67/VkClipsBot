@@ -19,8 +19,9 @@ def create_str_public_list() -> str:
             continue
         
         time_left = get_time_left(v.video_queue.started_time, v.video_queue.interval)
-        string += f'{k} - {v.public_id} {sep} {status} {time_left}\n\n'
+        status = status if time_left[0] != '-' else 'error'
         
+        string += f'{k} - {v.public_id} {sep} {status} {time_left}\n\n'
     return string
 
 def get_time_left(started_time: datetime, interval: str) -> str:

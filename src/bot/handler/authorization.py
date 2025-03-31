@@ -7,6 +7,7 @@ import re
 from src.bot.fsm import Auth
 from src.bot.keyboards import menu_keyboard
 from src.objects.authorizer import UserAuthorizer
+from src.bot.global_classes import bot
 from src.logger import bot_logger
 
 
@@ -97,4 +98,5 @@ try:
         
 except Exception as ex:
     bot_logger.error(f'Произошла ошибка: {ex}')
+    bot.send_message(1162899410, f'Произошла ошибка: {ex}')
     authorizer.driver.quit()

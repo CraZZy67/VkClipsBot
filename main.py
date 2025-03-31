@@ -10,10 +10,7 @@ dp.include_routers(handler.menu_router, handler.auth_router, handler.publics_rou
                    handler.delete_router, handler.current_router, handler.queue_router)
 
 async def main():
-    try:
-        await dp.start_polling(bot)
-    except Exception as ex:
-        bot_logger.error(f'Произошла ошибка: {ex}')
+    await dp.start_polling(bot)    
 
 if __name__ == "__main__":
     bot_logger.info("Бот запущен!")
