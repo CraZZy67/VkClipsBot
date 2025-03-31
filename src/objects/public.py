@@ -4,10 +4,8 @@ from src.objects.interceptor import Interceptor
 from src.objects.video_queue import VideoQueue, DebugVideoQueue
 from src.settings import Settings
 from src.logger import pub_logger
-from src.my_exceptions import (OverOneStartedException, QueueLenException,
-                               AccessDeniedException, NoFoundVideoException,
-                               NoValidInterPublicException, NoValidVideoPathException,
-                               NoValidOwnPublicException)
+from src.bot.global_classes import collector
+import src.my_exceptions as my_exceptions
 
 
 class Public:
@@ -49,10 +47,11 @@ class Public:
                 if not int(i[3:]) in self.interceptor.inted_video:
                     self.interceptor.inted_video.append(int(i[3:]))
                              
-        except AccessDeniedException:
-                    raise AccessDeniedException(public_id=self.public_id)
-        except NoValidInterPublicException:
-                    raise NoValidInterPublicException(public_id=self.public_id)
+        except my_exceptions.AccessDeniedException:
+                    raise my_exceptions.AccessDeniedException(public_id=self.public_id)
+                
+        except my_exceptions.NoValidInterPublicException:
+                    raise my_exceptions.NoValidInterPublicException(public_id=self.public_id)
                               
     async def start(self):
         try:
@@ -73,8 +72,8 @@ class Public:
                         
                         self.video_queue.add_video(self.interceptor.intercept_video())
                         
-                        video = await self.video_queue.run_next_video(self.inter_public, 
-                                                                        self.public_id)
+                        video = await self.video_queue.run_next_video(self.inter_public, self.public_id)
+                        collector.save_state()
                         
                         if video:
                             os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{video}.mp4')
@@ -87,20 +86,23 @@ class Public:
                         self.stop = False
                         break
             else:
-                raise OverOneStartedException
+                raise my_exceptions.OverOneStartedException
             
-        except NoValidOwnPublicException:
+        except my_exceptions.NoValidOwnPublicException:
             self.started = False
-            raise NoValidOwnPublicException(public_id=self.public_id)
-        except NoValidVideoPathException:
+            raise my_exceptions.NoValidOwnPublicException(public_id=self.public_id)
+        
+        except my_exceptions.NoValidVideoPathException:
             self.started = False
-            raise NoValidVideoPathException(public_id=self.public_id)
-        except NoValidInterPublicException:
+            raise my_exceptions.NoValidVideoPathException(public_id=self.public_id)
+        
+        except my_exceptions.NoValidInterPublicException:
             self.started = False
-            raise NoValidInterPublicException(public_id=self.public_id)
-        except AccessDeniedException:
+            raise my_exceptions.NoValidInterPublicException(public_id=self.public_id)
+        
+        except my_exceptions.AccessDeniedException:
             self.started = False
-            raise AccessDeniedException(public_id=self.public_id)
+            raise my_exceptions.AccessDeniedException(public_id=self.public_id)
                       
     def add_video(self, video_id: str):
         if len(self.video_queue.queue) < self.settings.MAX_LEN_QUEUE:
@@ -108,21 +110,22 @@ class Public:
             try:
                 self.interceptor.DOWNLOADER.download(public_id=self.inter_public,
                                                      video_id=video_id)
-            except AccessDeniedException:
-                raise AccessDeniedException(public_id=self.public_id)
-            except NoFoundVideoException:
-                raise NoFoundVideoException(public_id=self.public_id)
+            except my_exceptions.AccessDeniedException:
+                raise my_exceptions.AccessDeniedException(public_id=self.public_id)
+            
+            except my_exceptions.NoFoundVideoException:
+                raise my_exceptions.NoFoundVideoException(public_id=self.public_id)
             
             self.video_queue.add_video(video_id=video_id)
         else:
-            raise QueueLenException
+            raise my_exceptions.QueueLenException
     
     def delete_video(self):
         if len(self.video_queue.queue) > 2:
             video = self.video_queue.delete_video()
             os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{video}.mp4')
         else:
-            raise QueueLenException
+            raise my_exceptions.QueueLenException
         
 
 class DebugPublic(Public):
@@ -154,8 +157,9 @@ class DebugPublic(Public):
                         
                         self.video_queue.add_video(self.interceptor.intercept_video())
                         
-                        video = self.video_queue.run_next_video(self.inter_public, 
-                                                                self.public_id)
+                        video = self.video_queue.run_next_video(self.inter_public, self.public_id)
+                        collector.save_state()
+                        
                         if video:
                             os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{video}.mp4')
                     else:
@@ -163,17 +167,20 @@ class DebugPublic(Public):
                         self.stop = False
                         break
             else:
-                raise OverOneStartedException
+                raise my_exceptions.OverOneStartedException
             
-        except NoValidOwnPublicException:
+        except my_exceptions.NoValidOwnPublicException:
             self.started = False
-            raise NoValidOwnPublicException(public_id=self.public_id)
-        except NoValidVideoPathException:
+            raise my_exceptions.NoValidOwnPublicException(public_id=self.public_id)
+        
+        except my_exceptions.NoValidVideoPathException:
             self.started = False
-            raise NoValidVideoPathException(public_id=self.public_id)
-        except NoValidInterPublicException:
+            raise my_exceptions.NoValidVideoPathException(public_id=self.public_id)
+        
+        except my_exceptions.NoValidInterPublicException:
             self.started = False
-            raise NoValidInterPublicException(public_id=self.public_id)
-        except AccessDeniedException:
+            raise my_exceptions.NoValidInterPublicException(public_id=self.public_id)
+        
+        except my_exceptions.AccessDeniedException:
             self.started = False
-            raise AccessDeniedException(public_id=self.public_id)
+            raise my_exceptions.AccessDeniedException(public_id=self.public_id)
