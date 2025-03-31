@@ -4,7 +4,6 @@ from src.objects.interceptor import Interceptor
 from src.objects.video_queue import VideoQueue, DebugVideoQueue
 from src.settings import Settings
 from src.logger import pub_logger
-from src.bot.global_classes import collector
 import src.my_exceptions as my_exceptions
 
 
@@ -73,7 +72,6 @@ class Public:
                         self.video_queue.add_video(self.interceptor.intercept_video())
                         
                         video = await self.video_queue.run_next_video(self.inter_public, self.public_id)
-                        collector.save_state()
                         
                         if video:
                             os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{video}.mp4')
@@ -158,7 +156,6 @@ class DebugPublic(Public):
                         self.video_queue.add_video(self.interceptor.intercept_video())
                         
                         video = self.video_queue.run_next_video(self.inter_public, self.public_id)
-                        collector.save_state()
                         
                         if video:
                             os.remove(f'.{self.SL}{self.settings.VIDEO_PATH}{self.PREF_DIR}{self.inter_public}{self.SL}{video}.mp4')
