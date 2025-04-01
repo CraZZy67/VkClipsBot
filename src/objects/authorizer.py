@@ -101,7 +101,7 @@ class UserAuthorizer:
             auth_logger.info('Обновление анонимного токена.')
             
             self.driver.get(self.ANONYM_LINK)
-            sleep(1.0)
+            sleep(3.0)
 
             self.LOCAL_STORAGE_KEY = self.ANONYM_LOCAL_STORAGE_KEY
 
