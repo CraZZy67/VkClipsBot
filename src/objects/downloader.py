@@ -21,7 +21,7 @@ class VideoDownloader:
     REFERER_LINK = 'https://vk.com/improcom?from=groups'
     
     KEYS_LIST = ['payload', 1, 4, 'player', 'params', 0]
-    QUALITY_KEYS = ['url1080', 'url720']
+    QUALITY_KEYS = ['url1080', 'url720', 'url480', 'url360', 'url240']
     
     settings = Settings()
     settings.HEADERS = Settings.HEADERS.copy()
@@ -67,7 +67,8 @@ class VideoDownloader:
         for i in self.QUALITY_KEYS:
             if i in response:
                 response = response[i]
-
+                break
+            
         response = requests.get(response, headers=self.settings.HEADERS)
         
         down_logger.debug(f'Заголовки ответа (video): {response.headers}')

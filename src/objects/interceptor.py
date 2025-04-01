@@ -55,7 +55,11 @@ class Interceptor:
                 if not i in self.inted_video:
                     inter_logger.debug(f'Видео которое будет загружено: {i}')
                     
-                    self.DOWNLOADER.download(public_id=self.inter_public, video_id=i)
+                    try:
+                        self.DOWNLOADER.download(public_id=self.inter_public, video_id=i)
+                    except KeyError:
+                        continue
+                    
                     self.inted_video.append(i)
                     return f'{self.PREF_FL}{i}'
             
