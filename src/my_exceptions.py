@@ -57,3 +57,11 @@ class NoValidDataException(Exception):
     
     def __str__(self):
         return 'Введенные данные не валидны.'
+
+class WhileException(Exception):
+    def __init__(self, public_id: str = None, exampler: str = None):
+        self.public_id = public_id
+        self.exampler = exampler
+    
+    def __str__(self):
+        return 'произошла ошибка в цикле.'

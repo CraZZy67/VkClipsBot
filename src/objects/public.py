@@ -101,6 +101,10 @@ class Public:
         except my_exceptions.AccessDeniedException:
             self.started = False
             raise my_exceptions.AccessDeniedException(public_id=self.public_id)
+        
+        except Exception as ex:
+            self.started = False
+            raise my_exceptions.WhileException(public_id=self.public_id, exampler=ex)
                       
     def add_video(self, video_id: str):
         if len(self.video_queue.queue) < self.settings.MAX_LEN_QUEUE:

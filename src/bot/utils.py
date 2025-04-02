@@ -20,6 +20,7 @@ def create_str_public_list() -> str:
         
         time_left = get_time_left(v.video_queue.started_time, v.video_queue.interval)
         status = status if time_left[0] != '-' else 'error'
+        time_left = time_left if time_left[0] != '-' else 'N/A'
         
         string += f'{k} - {v.public_id} {sep} {status} {time_left}\n\n'
     return string
