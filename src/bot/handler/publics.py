@@ -21,7 +21,7 @@ settings = Settings()
 try:
     @publics_router.callback_query(F.data == 'publics')
     async def publics_handler(callback: CallbackQuery):
-        if len(os.listdir(f'.{settings.SLESH}{settings.CREDS_PATH}')):
+        if len(os.listdir(f'.{settings.SLESH}{settings.CREDS_PATH}')) > 1:
             collector.save_state()
             
             if len(collector.publics):
