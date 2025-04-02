@@ -57,10 +57,11 @@ class Interceptor:
                     
                     try:
                         self.DOWNLOADER.download(public_id=self.inter_public, video_id=i)
+                        self.inted_video.append(i)
                     except KeyError:
                         continue
                     
-                    self.inted_video.append(i)
+                    
                     return f'{self.PREF_FL}{i}'
             
             count += 10
