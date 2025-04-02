@@ -109,6 +109,9 @@ class Public:
         except Exception as ex:
             self.started = False
             self.stop = False
+            
+            pub_logger.error(f'Произошла ошибка в цикле паблика {ex.public_id}: {ex.exampler}')
+            
             raise my_exceptions.WhileException(public_id=self.public_id, exampler=ex)
                       
     def add_video(self, video_id: str):
