@@ -88,22 +88,27 @@ class Public:
             
         except my_exceptions.NoValidOwnPublicException:
             self.started = False
+            self.stop = False
             raise my_exceptions.NoValidOwnPublicException(public_id=self.public_id)
         
         except my_exceptions.NoValidVideoPathException:
             self.started = False
+            self.stop = False
             raise my_exceptions.NoValidVideoPathException(public_id=self.public_id)
         
         except my_exceptions.NoValidInterPublicException:
             self.started = False
+            self.stop = False
             raise my_exceptions.NoValidInterPublicException(public_id=self.public_id)
         
         except my_exceptions.AccessDeniedException:
             self.started = False
+            self.stop = False
             raise my_exceptions.AccessDeniedException(public_id=self.public_id)
         
         except Exception as ex:
             self.started = False
+            self.stop = False
             raise my_exceptions.WhileException(public_id=self.public_id, exampler=ex)
                       
     def add_video(self, video_id: str):
