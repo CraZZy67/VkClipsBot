@@ -46,11 +46,11 @@ class Public:
                 if not int(i[3:]) in self.interceptor.inted_video:
                     self.interceptor.inted_video.append(int(i[3:]))
                              
-        except my_exceptions.AccessDeniedException:
-                    raise my_exceptions.AccessDeniedException(public_id=self.public_id)
+        except my_exceptions.AccessDeniedException as ex:
+                    pub_logger.error(f'Произошла ошибка в цикле паблика {self.public_id}: {ex}')
                 
-        except my_exceptions.NoValidInterPublicException:
-                    raise my_exceptions.NoValidInterPublicException(public_id=self.public_id)
+        except my_exceptions.NoValidInterPublicException as ex:
+                    pub_logger.error(f'Произошла ошибка в цикле паблика {self.public_id}: {ex}')
                               
     async def start(self):
         try:
@@ -86,25 +86,25 @@ class Public:
             else:
                 raise my_exceptions.OverOneStartedException
             
-        except my_exceptions.NoValidOwnPublicException:
+        except my_exceptions.NoValidOwnPublicException as ex:
             self.started = False
             self.stop = False
-            raise my_exceptions.NoValidOwnPublicException(public_id=self.public_id)
+            pub_logger.error(f'Произошла ошибка в цикле паблика {self.public_id}: {ex}')
         
-        except my_exceptions.NoValidVideoPathException:
+        except my_exceptions.NoValidVideoPathException as ex:
             self.started = False
             self.stop = False
-            raise my_exceptions.NoValidVideoPathException(public_id=self.public_id)
+            pub_logger.error(f'Произошла ошибка в цикле паблика {self.public_id}: {ex}')
         
-        except my_exceptions.NoValidInterPublicException:
+        except my_exceptions.NoValidInterPublicException as ex:
             self.started = False
             self.stop = False
-            raise my_exceptions.NoValidInterPublicException(public_id=self.public_id)
+            pub_logger.error(f'Произошла ошибка в цикле паблика {self.public_id}: {ex}')
         
-        except my_exceptions.AccessDeniedException:
+        except my_exceptions.AccessDeniedException as ex:
             self.started = False
             self.stop = False
-            raise my_exceptions.AccessDeniedException(public_id=self.public_id)
+            pub_logger.error(f'Произошла ошибка в цикле паблика {self.public_id}: {ex}')
         
         except Exception as ex:
             self.started = False

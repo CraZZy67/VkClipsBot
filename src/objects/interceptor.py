@@ -37,12 +37,13 @@ class Interceptor:
         self.cycles = int()
             
     def intercept_video(self) -> str:
+        self.refresh_creds()
         count = 10
         
         try:
             video_count = self.get_json()['response']['count']
         except KeyError as ex:
-            inter_logger.error('Перехват ошибки: {ex}')
+            inter_logger.error(f'Перехват ошибки: {ex}')
             raise AccessDeniedException
         
         if not video_count: raise NoValidInterPublicException
@@ -75,7 +76,7 @@ class Interceptor:
         try:
             response = self.get_json(count=count)['response']
         except KeyError as ex:
-            inter_logger.error('Перехват ошибки: {ex}')
+            inter_logger.error(f'Перехват ошибки: {ex}')
             raise AccessDeniedException
         
         ids = list()
@@ -85,8 +86,6 @@ class Interceptor:
         return ids
     
     def get_json(self, count: str = '1') -> dict:
-        self.refresh_creds()
-        
         self.DATA['owner_id'] = self.inter_public
         self.DATA['count'] = count
         self.DATA['access_token'] = self.creds['access_token']

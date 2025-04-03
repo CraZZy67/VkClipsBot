@@ -15,14 +15,6 @@ async def main():
 
 if __name__ == "__main__":
     bot_logger.info("Бот запущен!")
-    
-    try:
-        run(main())
-    except my_exceptions.WhileException as ex:
-        bot_logger.error(f'Произошла ошибка в цикле паблика {ex.public_id}: {ex.exampler}')
-        bot.send_message(1162899410, f'Произошла ошибка в цикле паблика {ex.public_id}: {ex.exampler}')
-        
-    except Exception as ex:
-        bot_logger.error(f'Произошла ошибка: {ex}')
-        bot.send_message(1162899410, f'Произошла ошибка: {ex}')
+    run(main())
+
     
