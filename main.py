@@ -4,7 +4,6 @@ from src.bot.global_classes import dp, bot
 from src.logger import bot_logger
 from src.bot import handler
 from src.logger import bot_logger
-import src.my_exceptions as my_exceptions
 
 
 dp.include_routers(handler.menu_router, handler.auth_router, handler.publics_router, 

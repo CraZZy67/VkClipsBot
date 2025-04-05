@@ -43,8 +43,6 @@ class Public:
                 
                 if not i in self.video_queue.queue:       
                     self.video_queue.add_video(i)
-                if not int(i[3:]) in self.interceptor.inted_video:
-                    self.interceptor.inted_video.append(int(i[3:]))
                              
         except my_exceptions.AccessDeniedException as ex:
                     pub_logger.error(f'Произошла ошибка в цикле паблика {self.public_id}: {ex}')

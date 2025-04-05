@@ -1,12 +1,11 @@
 import requests
 
 import pickle
-from time import sleep
 
 from src.objects.downloader import VideoDownloader
 from src.settings import Settings
 from src.logger import inter_logger
-from src.my_exceptions import AccessDeniedException, NoValidInterPublicException
+from src.my_exceptions import AccessDeniedException
 
 
 class Interceptor:
@@ -32,7 +31,6 @@ class Interceptor:
     
     def __init__(self, inter_public: str):
         self.inter_public = inter_public
-        self.inted_video = list()
 
         self.cycles = int()
         self.next_hash = str()
@@ -60,6 +58,7 @@ class Interceptor:
         try:
             if self.next_hash:
                 response = self.get_json(next_hash=self.next_hash)['response']
+                response['count']
                 
                 try:
                     self.next_hash = response['next_from']
