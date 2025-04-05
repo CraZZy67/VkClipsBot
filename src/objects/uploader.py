@@ -79,6 +79,7 @@ class VideoUploader:
         driver = Chrome(options=self.options)
         driver.implicitly_wait(15.0)
         driver.set_window_size(1200, 850)
+        driver.command_executor.set_timeout(1000)
         
         return driver
         
