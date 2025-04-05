@@ -14,7 +14,7 @@ class Interceptor:
     DATA = {
         'owner_id': None, 
         'fields': 'about,description,followers_count,is_closed,verified,screen_name,friend_status,is_subscribed,blacklisted,domain,sex,can_write_private_message,first_name_gen,last_name_gen,first_name_acc,is_nft_photo,admin_level,member_status,members_count,is_member,ban_info,can_message',
-        'count': None,
+        'count': 10,
         'access_token': None
     }
     URL = 'https://api.vk.com/method/shortVideo.getOwnerVideos?v=5.246&client_id={anonym_id}'
@@ -35,46 +35,41 @@ class Interceptor:
         self.inted_video = list()
 
         self.cycles = int()
+        self.next_hash = str()
+        self.ids = list()
             
     def intercept_video(self) -> str:
         self.refresh_creds()
-        count = 10
         
+        if not self.ids: self.ids = self.get_video_ids()
+        
+        for i in self.ids:
+            inter_logger.debug(f'Видео которое будет загружено: {i}')
+            
+            try:
+                self.ids.pop(self.ids.index(i))
+                self.DOWNLOADER.download(public_id=self.inter_public, video_id=i)
+            except KeyError:
+                continue
+    
+            return f'{self.PREF_FL}{i}'
+        
+        return self.intercept_video()
+         
+    def get_video_ids(self) -> list:
         try:
-            video_count = self.get_json()['response']['count']
-        except KeyError as ex:
-            inter_logger.error(f'Перехват ошибки: {ex}')
-            raise AccessDeniedException
-        
-        if not video_count: raise NoValidInterPublicException
-        
-        while True:
-            ids = self.get_video_ids(count=str(count))
-            sleep(1.0)
-            
-            for i in ids:
-                if not i in self.inted_video:
-                    inter_logger.debug(f'Видео которое будет загружено: {i}')
-                    
-                    try:
-                        self.DOWNLOADER.download(public_id=self.inter_public, video_id=i)
-                        self.inted_video.append(i)
-                    except KeyError:
-                        continue
-                    
-                    
-                    return f'{self.PREF_FL}{i}'
-            
-            count += 10
-            
-            if video_count - count < 0:
-                self.cycles += 1
-                self.inted_video = list()
-                count = 10       
+            if self.next_hash:
+                response = self.get_json(next_hash=self.next_hash)['response']
                 
-    def get_video_ids(self, count: str) -> list:
-        try:
-            response = self.get_json(count=count)['response']
+                try:
+                    self.next_hash = response['next_from']
+                except KeyError:
+                    self.next_hash = str()
+                    self.cycles += 1
+            else:
+                response = self.get_json()['response']
+                self.next_hash = response['next_from']
+                  
         except KeyError as ex:
             inter_logger.error(f'Перехват ошибки: {ex}')
             raise AccessDeniedException
@@ -83,12 +78,15 @@ class Interceptor:
         
         for i in response['items']:
             ids.append(i['id'])
+            
         return ids
     
-    def get_json(self, count: str = '1') -> dict:
+    def get_json(self, next_hash: str = None) -> dict:
         self.DATA['owner_id'] = self.inter_public
-        self.DATA['count'] = count
         self.DATA['access_token'] = self.creds['access_token']
+        
+        if next_hash:
+            self.DATA['start_from'] = next_hash
         
         response = requests.post(url=self.URL.format(anonym_id=self.ANONYM_ID), 
                                  headers=self.settings.HEADERS, data=self.DATA,
