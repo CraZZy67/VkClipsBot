@@ -69,12 +69,20 @@ class VideoUploader:
         dotenv.load_dotenv()
         
         self.options = ChromeOptions()
-        service = Service(port=os.getenv('PORT'))
         
         if os.getenv('PLATFORM') == 'Linux':
+            service = Service(f'{os.getenv('WORK_DIR_ABS_PATH')}chromedriver', port=os.getenv('PORT'))
+        else:
+            service = Service(port=os.getenv('PORT'))
+        
+        if os.getenv('PLATFORM') == 'Linux':
+            self.options.add_argument('start-maximized')
+            self.options.add_argument('enable-automation')
             self.options.add_argument('--headless')
-            self.options.add_argument("--no-sandbox")
-            self.options.add_argument("--disable-dev-shm-usage")
+            self.options.add_argument('--no-sandbox')
+            self.options.add_argument('--disable-dev-shm-usage')
+            self.options.add_argument('--disable-browser-side-navigation')
+            self.options.add_argument('--disable-gpu')
         elif headless:
             self.options.add_argument('--headless')
           
@@ -102,4 +110,4 @@ class VideoUploader:
     def add_certain_cookie(self, excepted_domain: str, driver: Chrome):
         for cookie in self.creds['cookie']:
             if cookie['domain'] != excepted_domain:
-                driver.add_cookie({'name': cookie['name'], 'value': cookie['value']})
+                driver.add_cookie({'name': cookie['name'], 'value': cookie['value'], 'domain': cookie['domain']})
