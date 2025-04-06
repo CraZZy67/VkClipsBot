@@ -1,6 +1,7 @@
 from selenium.webdriver import Chrome, ChromeOptions
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.chrome.service import Service
 import dotenv
 
 import pickle
@@ -25,6 +26,7 @@ class UserAuthorizer:
         dotenv.load_dotenv()
         
         self.options = ChromeOptions()
+        service = Service("chromedriver", port=int(os.getenv('PORT')))
         
         if os.getenv('PLATFORM') == 'Linux':
             self.options.add_argument('--headless')
@@ -33,7 +35,7 @@ class UserAuthorizer:
         elif headless:
             self.options.add_argument('--headless')
             
-        self.driver = Chrome(options=self.options)
+        self.driver = Chrome(options=self.options, service=service)
         self.driver.implicitly_wait(15.0)
         self.driver.command_executor.set_timeout(1000)
     

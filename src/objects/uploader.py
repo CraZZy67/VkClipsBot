@@ -1,6 +1,7 @@
 from selenium.webdriver import Chrome, ChromeOptions, ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.chrome.service import Service
 from selenium.common.exceptions import StaleElementReferenceException, NoSuchElementException, InvalidArgumentException
 
 import dotenv
@@ -66,7 +67,9 @@ class VideoUploader:
          
     def get_driver(self, headless: bool) -> Chrome:
         dotenv.load_dotenv()
+        
         self.options = ChromeOptions()
+        service = Service("chromedriver", port=os.getenv('PORT'))
         
         if os.getenv('PLATFORM') == 'Linux':
             self.options.add_argument('--headless')
@@ -74,9 +77,8 @@ class VideoUploader:
             self.options.add_argument("--disable-dev-shm-usage")
         elif headless:
             self.options.add_argument('--headless')
-        
-            
-        driver = Chrome(options=self.options)
+          
+        driver = Chrome(options=self.options, service=service)
         driver.implicitly_wait(15.0)
         driver.set_window_size(1200, 850)
         driver.command_executor.set_timeout(1000)
