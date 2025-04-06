@@ -69,7 +69,7 @@ class VideoUploader:
         dotenv.load_dotenv()
         
         self.options = ChromeOptions()
-        service = Service("chromedriver", port=os.getenv('PORT'))
+        service = Service(port=os.getenv('PORT'))
         
         if os.getenv('PLATFORM') == 'Linux':
             self.options.add_argument('--headless')

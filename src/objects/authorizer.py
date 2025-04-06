@@ -26,7 +26,7 @@ class UserAuthorizer:
         dotenv.load_dotenv()
         
         self.options = ChromeOptions()
-        service = Service("chromedriver", port=int(os.getenv('PORT')))
+        service = Service(port=int(os.getenv('PORT')))
         
         if os.getenv('PLATFORM') == 'Linux':
             self.options.add_argument('--headless')
