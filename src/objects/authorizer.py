@@ -103,8 +103,9 @@ class UserAuthorizer:
         
         with open(Settings.CREDS_PATH + file_name + '.pkl', 'wb') as file:
             pickle.dump(dict(cookie=cookie, access_token=creds['access_token']), file)
-        
-        self.driver.quit()
+            
+        if not out_session:
+            self.driver.quit()
     
     def refresh_anonym_token(self):
         try:

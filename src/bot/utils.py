@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
+from asyncio import sleep
 
 from src.bot.global_classes import collector
 from src.objects.public import Public
+from src.objects.authorizer import UserAuthorizer
 
 
 def create_str_public_list() -> str:
@@ -78,3 +80,11 @@ def create_queue_info(public: Public) -> str:
     status = 'Will be started' if public.video_queue.run else 'Will be stoped'
     string += f'Cтатус: {status}'
     return string
+
+async def intercept_expiry(interval: float):
+    UserAuthorizer().refresh_anonym_token()
+     
+    while True:
+        await sleep(interval)
+        UserAuthorizer().refresh_anonym_token()
+        

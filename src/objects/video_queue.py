@@ -33,8 +33,6 @@ class VideoQueue:
                 queue_logger.info(f'Начало таймера. Задержка: {float(self.interval * 60)}')
                 await asyncio.sleep(float(self.interval * 60))
                 queue_logger.info('Конец таймера.')
-                
-                UserAuthorizer().refresh_anonym_token()
             else:
                 raise QueueLenException
             

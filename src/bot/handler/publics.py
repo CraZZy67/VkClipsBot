@@ -88,8 +88,6 @@ try:
                     
                 await state.clear()    
                 collector.save_state()
-
-                objects.UserAuthorizer().refresh_anonym_token()
                 
                 await message.answer('Паблик успешно добавлен!')
                 await message.answer(text='Приветствую. Выбери свои первые действия.', reply_markup=menu_keyboard())
