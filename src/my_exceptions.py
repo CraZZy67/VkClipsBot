@@ -65,3 +65,8 @@ class WhileException(Exception):
     
     def __str__(self):
         return 'произошла ошибка в цикле.'
+
+class StatusIsRed(Exception):
+    
+    def __str__(self):
+        return 'Видео не было загруженно.'

@@ -12,7 +12,7 @@ import os
 
 from src.settings import Settings
 from src.logger import upload_logger
-from src.my_exceptions import NoValidOwnPublicException, NoValidVideoPathException
+import src.my_exceptions as my_exceptions
 
 
 class VideoUploader: 
@@ -39,7 +39,7 @@ class VideoUploader:
                 button = driver.find_element(By.CSS_SELECTOR, '[data-testid="posting_create_clip_button"]')
             except NoSuchElementException as ex:
                 upload_logger.error(f'Перехват ошибки: {ex}')
-                raise NoValidOwnPublicException
+                raise my_exceptions.NoValidOwnPublicException
                 
             button.click()
             
@@ -49,7 +49,12 @@ class VideoUploader:
                 input.send_keys(file_path)
             except InvalidArgumentException as ex:
                 upload_logger.error(f'Перехват ошибки: {ex}')
-                raise NoValidVideoPathException
+                raise my_exceptions.NoValidVideoPathException
+            
+            time.sleep(3)
+            
+            status = driver.find_element(By.XPATH, '//*[@id="spa_root"]/div/section/div[3]/div[1]/div/div[2]/div/div')
+            if not status.text == 'Клип загружен. Обработка...': raise my_exceptions.StatusIsRed
             
             button = driver.find_element(By.CSS_SELECTOR, '[data-testid="clips-uploadForm-publish-button"]')
             wait = WebDriverWait(driver, timeout=self.TIMEOUT)
@@ -89,7 +94,7 @@ class VideoUploader:
         driver = Chrome(options=self.options, service=service)
         driver.implicitly_wait(15.0)
         driver.set_window_size(1200, 850)
-        driver.command_executor.set_timeout(1000)
+        driver.command_executor.set_timeout(360)
         
         return driver
         

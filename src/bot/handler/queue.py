@@ -68,12 +68,15 @@ try:
 
     @queue_router.callback_query(PublicsFactory.filter(F.info == 'change_interval'))
     async def change_interval_handler(callback: CallbackQuery, callback_data: PublicsFactory, state: FSMContext):
-        await state.set_state(ChangeInterval.interval)
-        ChangeInterval.id_data = callback_data.id
-        
-        await callback.message.answer('Введите интервал который на который вы хотите поменять старый.')
-        await callback.message.answer('Если захотите выйти то введите "cancel"')
-        await callback.answer()
+        if not collector.get_public(callback_data.id).started:
+            await state.set_state(ChangeInterval.interval)
+            ChangeInterval.id_data = callback_data.id
+            
+            await callback.message.answer('Введите интервал который на который вы хотите поменять старый.')
+            await callback.message.answer('Если захотите выйти то введите "cancel"')
+            await callback.answer()
+        else:
+            await callback.answer('Сначала остановите паблик')
 
     @queue_router.message(ChangeInterval.interval, F.text == 'cancel')
     async def catch_video_id_handler(message: Message, state: FSMContext):

@@ -21,7 +21,7 @@ class VideoDownloader:
     REFERER_LINK = 'https://vk.com/improcom?from=groups'
     
     KEYS_LIST = ['payload', 1, 4, 'player', 'params', 0]
-    QUALITY_KEYS = ['url720', 'url480', 'url360', 'url240', 'url144']
+    QUALITY_KEYS = ['url1080', 'url720', 'url480', 'url360', 'url240', 'url144']
     
     settings = Settings()
     settings.HEADERS = Settings.HEADERS.copy()

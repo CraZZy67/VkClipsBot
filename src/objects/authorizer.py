@@ -44,7 +44,7 @@ class UserAuthorizer:
             
         self.driver = Chrome(options=self.options, service=service)
         self.driver.implicitly_wait(15.0)
-        self.driver.command_executor.set_timeout(1000)
+        self.driver.command_executor.set_timeout(360)
     
     def send_verify_code(self, phone_number: str):
         self.driver.get(self.MESSENGER_LINK)
