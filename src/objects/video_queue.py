@@ -8,6 +8,7 @@ from src.my_exceptions import QueueLenException
 from src.settings import Settings
 from src.objects.authorizer import UserAuthorizer
 from src.logger import queue_logger
+import src.my_exceptions as my_exception
 
 
 class VideoQueue:
@@ -40,10 +41,17 @@ class VideoQueue:
             if self.run:
                 if len(self.queue):
                     video_id = self.queue.pop()
-                    
-                    self.UPLOADER.upload(own_public, inter_public, 
-                                        video_id=video_id)
-                    return video_id
+                    for i in range(3):
+                        try:
+                            self.UPLOADER.upload(own_public, inter_public, 
+                                                 video_id=video_id)
+                        except my_exception.StatusIsRed:
+                            continue
+                        
+                        return video_id
+                    else:
+                        queue_logger.info('Три попытки для опубликования видео истекли.')
+                        raise my_exception.NoValidDataException
                 else:
                     raise QueueLenException
             else:
