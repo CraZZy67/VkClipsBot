@@ -51,7 +51,7 @@ class VideoUploader:
                 upload_logger.error(f'Перехват ошибки: {ex}')
                 raise my_exceptions.NoValidVideoPathException
             
-            time.sleep(3)
+            time.sleep(1.5)
             
             status = driver.find_element(By.XPATH, '//*[@id="spa_root"]/div/section/div[3]/div[1]/div/div[2]/div/div')
             if not status.text == 'Клип загружен. Обработка...': raise my_exceptions.StatusIsRed
