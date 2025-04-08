@@ -15,7 +15,6 @@ dp = Dispatcher()
 bot = Bot(os.getenv('TOKEN'))
 
 collector = Collector(max_publics=settings.MAX_NUMBER_PUBLICS)
-UserAuthorizer().refresh_anonym_token()
 
 if len(os.listdir(f'.{settings.SLESH}{settings.STATES_PATH}')):
     collector.load_state()
