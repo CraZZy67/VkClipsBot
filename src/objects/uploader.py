@@ -19,7 +19,7 @@ class VideoUploader:
     settings = Settings()
     
     DOMAIN = 'https://vk.com/'
-    TIMEOUT = 500.0
+    TIMEOUT = 300.0
     
     SL = settings.SLESH
     PREF_DIR = settings.PREFIX_DIR
@@ -43,6 +43,14 @@ class VideoUploader:
                 
             button.click()
             
+            driver.implicitly_wait(2.0)
+            try:
+                button = driver.find_element(By.XPATH, '//*[@id="spa_root"]/div/section/div[3]/div[1]/div/div[3]/button')
+                button.click()
+            except NoSuchElementException:
+                upload_logger.info('Ошибка повтора не была найдена, продолжаем.')
+            driver.implicitly_wait(15.0)
+            
             input = driver.find_element(By.CSS_SELECTOR, '[data-testid="video_upload_select_file"]')
             file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{self.PREF_DIR}{inter_public}{self.SL}{video_id}.mp4'
             try:
@@ -50,11 +58,6 @@ class VideoUploader:
             except InvalidArgumentException as ex:
                 upload_logger.error(f'Перехват ошибки: {ex}')
                 raise my_exceptions.NoValidVideoPathException
-            
-            time.sleep(1.5)
-            
-            status = driver.find_element(By.XPATH, '//*[@id="spa_root"]/div/section/div[3]/div[1]/div/div[2]/div/div')
-            if not status.text == 'Клип загружен. Обработка...': raise my_exceptions.StatusIsRed
             
             button = driver.find_element(By.CSS_SELECTOR, '[data-testid="clips-uploadForm-publish-button"]')
             wait = WebDriverWait(driver, timeout=self.TIMEOUT)
@@ -94,7 +97,7 @@ class VideoUploader:
         driver = Chrome(options=self.options, service=service)
         driver.implicitly_wait(15.0)
         driver.set_window_size(1200, 850)
-        driver.command_executor.set_timeout(360)
+        driver.command_executor.set_timeout(300)
         
         return driver
         

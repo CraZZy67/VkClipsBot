@@ -43,7 +43,7 @@ class VideoQueue:
                         try:
                             self.UPLOADER.upload(own_public, inter_public, 
                                                  video_id=video_id)
-                        except my_exception.StatusIsRed:
+                        except Exception:
                             continue
                         
                         return video_id
