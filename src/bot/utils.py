@@ -87,4 +87,19 @@ async def intercept_expiry(interval: float):
     while True:
         await sleep(interval)
         UserAuthorizer().refresh_anonym_token()
-        
+
+class AutoStarter:
+    def __init__(self, interval: float):
+        self.interval = interval
+        self.stop = False
+        self.started = False
+    
+    async def start(self):
+        if not self.started:
+            while not self.stop:
+                self.started = True
+                
+                await sleep(self.interval)
+                await collector.start_publics()
+                
+            self.started = False

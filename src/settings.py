@@ -36,5 +36,7 @@ class Settings:
     
     MAX_LEN_QUEUE = 5
     MAX_NUMBER_PUBLICS = 5
+    
     REFRESH_TOKEN_INTERVAL = 43200.0
+    RESTART_PUBLICS_INTERVAL = 10800.0
     

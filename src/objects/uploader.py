@@ -43,14 +43,6 @@ class VideoUploader:
                 
             button.click()
             
-            driver.implicitly_wait(2.0)
-            try:
-                button = driver.find_element(By.XPATH, '//*[@id="spa_root"]/div/section/div[3]/div[1]/div/div[3]/button')
-                button.click()
-            except NoSuchElementException:
-                upload_logger.info('Ошибка повтора не была найдена, продолжаем.')
-            driver.implicitly_wait(15.0)
-            
             input = driver.find_element(By.CSS_SELECTOR, '[data-testid="video_upload_select_file"]')
             file_path = f'{os.getenv('WORK_DIR_ABS_PATH')}{self.settings.VIDEO_PATH}{self.PREF_DIR}{inter_public}{self.SL}{video_id}.mp4'
             try:
@@ -58,6 +50,14 @@ class VideoUploader:
             except InvalidArgumentException as ex:
                 upload_logger.error(f'Перехват ошибки: {ex}')
                 raise my_exceptions.NoValidVideoPathException
+            
+            driver.implicitly_wait(2.0)
+            try:
+                button = driver.find_element(By.XPATH, '//*[@id="spa_root"]/div/section/div[3]/div[1]/div/div[3]/button')
+                button.click()
+            except NoSuchElementException:
+                upload_logger.info('Ошибка повтора не была найдена, продолжаем.')
+            driver.implicitly_wait(15.0)
             
             button = driver.find_element(By.CSS_SELECTOR, '[data-testid="clips-uploadForm-publish-button"]')
             wait = WebDriverWait(driver, timeout=self.TIMEOUT)

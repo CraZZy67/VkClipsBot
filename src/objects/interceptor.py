@@ -47,7 +47,8 @@ class Interceptor:
             try:
                 self.ids.pop(self.ids.index(i))
                 self.DOWNLOADER.download(public_id=self.inter_public, video_id=i)
-            except KeyError:
+            except (KeyError, IndexError) as ex:
+                inter_logger.info(f'Пропуск видео, ошибка: {ex}')
                 continue
     
             return f'{self.PREF_FL}{i}'

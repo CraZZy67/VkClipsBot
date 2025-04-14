@@ -12,9 +12,10 @@ def menu_keyboard():
     builder.button(text='Инструкция', callback_data='instruction')
     builder.button(text='Остановить все паблики', callback_data='stop_all')
     builder.button(text='Запустить все паблики', callback_data='start_all')
+    builder.button(text='Автозапуск вкл/выкл', callback_data='auto_start')
     builder.button(text='Сохранить состояние', callback_data='save_state')
     
-    builder.adjust(3, 2, 1)
+    builder.adjust(3, 2, 1, 1)
     return builder.as_markup()
 
 def success_keyboard():

@@ -5,16 +5,17 @@ import os
 
 from src.objects.collector import Collector
 from src.settings import Settings
-from src.objects.authorizer import UserAuthorizer
+from src.bot.utils import AutoStarter
 
 
 load_dotenv()
 
-settings = Settings()
 dp = Dispatcher()
 bot = Bot(os.getenv('TOKEN'))
 
+settings = Settings()
 collector = Collector(max_publics=settings.MAX_NUMBER_PUBLICS)
+auto_starter = AutoStarter(interval=settings.RESTART_PUBLICS_INTERVAL)
 
 if len(os.listdir(f'.{settings.SLESH}{settings.STATES_PATH}')):
     collector.load_state()

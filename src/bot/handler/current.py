@@ -65,6 +65,10 @@ try:
             public.inter_public = message.text
             public.interceptor.inter_public = message.text
             
+            public.interceptor.cycles = int()
+            public.interceptor.next_hash = str()
+            public.interceptor.ids = list()
+            
             await state.clear()
             await message.answer('Отслеживаемый паблик был успешно изменен.')
             await message.answer(text=create_public_info(collector.get_public(ChangeInter.id_data)),
