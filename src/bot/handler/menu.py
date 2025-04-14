@@ -10,6 +10,7 @@ from src.settings import Settings
 from src.bot.keyboards import menu_keyboard, success_keyboard
 from src.bot.global_classes import collector
 from src.bot.utils import AutoStarter
+from src.logger import bot_logger
 
 
 menu_router = Router()
@@ -68,9 +69,11 @@ async def instruction_handler(callback: CallbackQuery):
 async def auto_start_handler(callback: CallbackQuery):
     if auto_starter.started:
         auto_starter.stop = True
+        bot_logger.info('Автозапуск был остановлен')
         await callback.answer('Автозапуск был остановлен')
     else:
         create_task(auto_starter.start())
+        bot_logger.info('Автозапуск был запущен')
         await callback.answer('Автозапуск был запущен')
     
 @menu_router.callback_query(F.data == 'success')
