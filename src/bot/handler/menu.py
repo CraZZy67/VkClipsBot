@@ -9,13 +9,15 @@ import os
 from src.settings import Settings
 from src.bot.keyboards import menu_keyboard, success_keyboard
 from src.bot.global_classes import collector
-from src.bot.global_classes import auto_starter
+from src.bot.utils import AutoStarter
 
 
 menu_router = Router()
 settings = Settings()
 
 dotenv.load_dotenv()
+
+auto_starter = AutoStarter(interval=settings.RESTART_PUBLICS_INTERVAL)
 ADMINS = os.getenv('ADMINS_ID').split(',')
 
 
