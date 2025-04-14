@@ -5,7 +5,6 @@ import os
 
 from src.objects.collector import Collector
 from src.settings import Settings
-from src.bot.utils import AutoStarter
 
 
 load_dotenv()
