@@ -68,10 +68,10 @@ async def instruction_handler(callback: CallbackQuery):
 async def auto_start_handler(callback: CallbackQuery):
     if auto_starter.started:
         auto_starter.stop = True
-        callback.answer('Автозапуск был остановлен')
+        await callback.answer('Автозапуск был остановлен')
     else:
         create_task(auto_starter.start())
-        callback.answer('Автозапуск был запущен')
+        await callback.answer('Автозапуск был запущен')
     
 @menu_router.callback_query(F.data == 'success')
 async def success_handler(callback: CallbackQuery):
